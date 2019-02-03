@@ -249,16 +249,17 @@ Main =
       if Site.software is 'yotsuba'
         $.rmClass doc, style
         style = null
-        for styleSheet in styleSheets
-          if styleSheet.href is mainStyleSheet?.href
-            style = styleSheet.title.toLowerCase().replace('new', '').trim().replace /\s+/g, '-'
-            style = styleSheet.href.match(/[a-z]*(?=[^/]*$)/)[0] if style is '_special'
-            style = null unless style in knownStyles
-            break
-        if style
-          $.addClass doc, style
-          $.rm Main.bgColorStyle
-          return
+        if styleSheet is not null
+          for styleSheet in styleSheets
+            if styleSheet.href is mainStyleSheet?.href
+              style = styleSheet.title.toLowerCase().replace('new', '').trim().replace /\s+/g, '-'
+              style = styleSheet.href.match(/[a-z]*(?=[^/]*$)/)[0] if style is '_special'
+              style = null unless style in knownStyles
+              break
+          if style
+            $.addClass doc, style
+            $.rm Main.bgColorStyle
+            return
 
       # Determine proper dialog background color for other themes.
       div = Site.bgColoredEl()

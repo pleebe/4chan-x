@@ -93,7 +93,7 @@ SW.yotsuba =
     thread.fileLimit = /\bimagelimit *= *1\b/.test scriptData
     thread.ipCount   = if (m = scriptData.match /\bunique_ips *= *(\d+)\b/) then +m[1]
 
-    if g.BOARD.ID is 'f' and thread.OP.file
+    if g.BOARD.ID is 'f' and thread.OP and thread.OP.file
       {file} = thread.OP
       $.ajax "#{location.protocol}//archive.4plebs.org/f/thread/#{thread}.json",
         timeout: $.MINUTE
