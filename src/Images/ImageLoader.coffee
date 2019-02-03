@@ -12,7 +12,7 @@ ImageLoader =
       g.posts.forEach ImageLoader.prefetch
 
     if Conf['Replace WEBM']
-      $.on d, 'scroll visibilitychange 4chanXInitFinished PostsInserted', @playVideos
+      $.on d, 'scroll visibilitychange 4plebsXInitFinished PostsInserted', @playVideos
 
     return unless Conf['Image Prefetching'] and g.VIEW in ['index', 'thread']
 

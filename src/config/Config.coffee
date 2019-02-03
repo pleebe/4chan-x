@@ -3,7 +3,7 @@ Config =
     'Miscellaneous':
       'Redirect to HTTPS': [
         true
-        'Redirect to the HTTPS version of 4chan.'
+        'Redirect to the HTTPS version of 4plebs.'
       ]
       'JSON Index': [
         true
@@ -11,7 +11,7 @@ Config =
       ]
       'Use <%= meta.name %> Catalog': [
         true
-        'Link to <%= meta.name %>\'s catalog instead of the native 4chan one.'
+        'Link to <%= meta.name %>\'s catalog instead of the native 4plebs one.'
         1
       ]
       'Index Refresh Notifications': [
@@ -33,10 +33,10 @@ Config =
       ]
       'Announcement Hiding': [
         true
-        'Add button to hide 4chan announcements.'
+        'Add button to hide 4plebs announcements.'
       ]
       'Desktop Notifications': [
-        true
+        false
         'Enables desktop notifications across various <%= meta.name %> features.'
       ]
       '404 Redirect': [
@@ -171,7 +171,7 @@ Config =
         'Make everyone Anonymous.'
       ]
       'Filter': [
-        true
+        false
         'Self-moderation placebo.'
       ]
       'Filtered Backlinks': [
@@ -180,19 +180,19 @@ Config =
         1
       ]
       'Recursive Hiding': [
-        true
+        false
         'Hide replies of hidden posts, recursively.'
       ]
       'Thread Hiding Buttons': [
-        true
+        false
         'Add buttons to hide entire threads.'
       ]
       'Reply Hiding Buttons': [
-        true
+        false
         'Add buttons to hide single replies.'
       ]
       'Stubs': [
-        true
+        false
         'Show stubs of hidden threads / replies.'
       ]
 
@@ -202,15 +202,15 @@ Config =
         'Expand images / videos.'
       ]
       'Image Hover': [
-        true
+        false
         'Show full image / video on mouseover.'
       ]
       'Image Hover in Catalog': [
-        true
+        false
         'Show full image / video on mouseover in <%= meta.name %> catalog.'
       ]
       'Gallery': [
-        true
+        false
         'Adds a simple and cute image gallery. Has more options in the gallery menu.'
       ]
       'Fullscreen Gallery': [
@@ -298,7 +298,7 @@ Config =
       ]
       'Use Faster Image Host': [
         true
-        'Change is*.4chan.org links to point to the faster i.4cdn.org host.'
+        'Change is*.4plebs.org links to point to the faster i.4pcdn.org host.'
       ]
 
     'Menu':
@@ -353,7 +353,7 @@ Config =
         'Fetch and insert new replies. Has more options in the header menu and the "Advanced" tab.'
       ]
       'Unread Count': [
-        true
+        false
         'Show the unread posts count in the tab title.'
       ]
       'Quoted Title': [
@@ -367,19 +367,19 @@ Config =
         1
       ]
       'Unread Favicon': [
-        true
+        false
         'Show a different favicon when there are unread posts.'
       ]
       'Unread Line': [
-        true
+        false
         'Show a line to distinguish read posts from unread ones.'
       ]
       'Remember Last Read Post': [
-        true
+        false
         'Remember how far you\'ve read after you close the thread.'
       ]
       'Scroll to Last Read Post': [
-        true
+        false
         'Scroll back to the last read post when reopening a thread.'
         1
       ]
@@ -411,7 +411,7 @@ Config =
         'Places the thread updater and thread stats in the header instead of floating them.'
       ]
       'Thread Watcher': [
-        true
+        false
         'Bookmark threads. Has more options in the thread watcher menu.'
       ]
       'Fixed Thread Watcher': [
@@ -429,7 +429,7 @@ Config =
         'Label each post from a new IP with the thread\'s current IP count.'
       ]
       'Reply Pruning': [
-        true
+        false
         'Add option in header menu to hide old replies in long threads. Activated by default in stickies.'
       ]
       'Prune All Threads': [
@@ -513,7 +513,7 @@ Config =
       ]
       'Pass Link': [
         false
-        'Add a 4chan Pass login link to the bottom of the page.'
+        'Add a 4plebs Pass login link to the bottom of the page.'
       ]
 
     'Quote Links':
@@ -811,23 +811,20 @@ Config =
     archiveAutoUpdate: true
 
   boardnav: """
-    [ toggle-all ]
-    a-replace
-    c-replace
-    g-replace
-    k-replace
-    v-replace
-    vg-replace
-    vr-replace
-    ck-replace
-    co-replace
-    fit-replace
-    jp-replace
-    mu-replace
-    sp-replace
-    tv-replace
-    vp-replace
-    [external-text:"FAQ","<%= meta.faq %>"]
+    [ external-text:\"adv\",\"//test.4plebs.org/adv/\" /
+      external-text:\"f\",\"//test.4plebs.org/f/\" /
+      external-text:\"hr\",\"//test.4plebs.org/hr/\" /
+      external-text:\"o\",\"//test.4plebs.org/o/\" /
+      external-text:\"pol\",\"//test.4plebs.org/pol/\" /
+      external-text:\"s4s\",\"//test.4plebs.org/s4s/\" /
+      external-text:\"sp\",\"//test.4plebs.org/sp/\" /
+      external-text:\"tg\",\"//test.4plebs.org/tg/\" /
+      external-text:\"trv\",\"//test.4plebs.org/trv/\" /
+      external-text:\"tv\",\"//test.4plebs.org/tv/\" /
+      external-text:\"x\",\"//test.4plebs.org/x/\" ]
+      [ external-text:\"plebs\",\"//test.4plebs.org/plebs/\" ]
+      [ external-text:\"FAQ\",\"//archive.4plebs.org/_/articles/faq/\" ]
+      [ @ ]
   """
 
   QR:
@@ -837,8 +834,6 @@ Config =
     sjisPreview: false
 
   jsWhitelist: '''
-    http://s.4cdn.org
-    https://s.4cdn.org
     http://www.google.com
     https://www.google.com
     https://www.gstatic.com
@@ -849,12 +844,6 @@ Config =
     'self'
     'unsafe-inline'
     'unsafe-eval'
-
-    # Banner ads
-    #http://s.zkcdn.net/ados.js
-    #https://s.zkcdn.net/ados.js
-    #http://engine.4chan-ads.org
-    #https://engine.4chan-ads.org
   '''
 
   captchaLanguage: ''

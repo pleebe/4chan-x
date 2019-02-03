@@ -69,11 +69,11 @@ QR.oekaki =
         src: 'https://rawgit.com/desuwa/tegaki/master/tegaki.js'
       $.on script, 'load', onload
       $.add d.head, script
-    script = $ 'script[src^="//s.4cdn.org/js/painter"], script[src="https://rawgit.com/desuwa/tegaki/master/tegaki.js"]', d.head
+    script = $ 'script[src^="//test.4plebs.org/js/painter"], script[src="https://rawgit.com/desuwa/tegaki/master/tegaki.js"]', d.head
     if script
       if !script.dataset.success
         $.global ->
-          document.querySelector('script[src^="//s.4cdn.org/js/painter"], script[src="https://rawgit.com/desuwa/tegaki/master/tegaki.js"]').dataset.success = !!window.Tegaki
+          document.querySelector('script[src^="//test.4plebs.org/js/painter"], script[src="https://rawgit.com/desuwa/tegaki/master/tegaki.js"]').dataset.success = !!window.Tegaki
       if script.dataset.success is 'true'
         cb()
       else
@@ -82,9 +82,9 @@ QR.oekaki =
     else
       style = $.el 'link',
         rel: 'stylesheet'
-        href: "//s.4cdn.org/css/painter.#{Date.now()}.css"
+        href: "//test.4plebs.org/css/painter.#{Date.now()}.css"
       script = $.el 'script',
-        src: "//s.4cdn.org/js/painter.min.#{Date.now()}.js"
+        src: "//test.4plebs.org/js/painter.min.#{Date.now()}.js"
       $.on style,  'load', onload
       $.on script, 'load', onload
       $.on script, 'error', onerror

@@ -24,7 +24,7 @@ Build.Test =
       $.rm el
     for el in $$ 'a[href]', root2
       href = el.href
-      href = href.replace /(^\w+:\/\/boards\.4chan(?:nel)?\.org\/[^\/]+\/thread\/\d+)\/.*/, '$1'
+      href = href.replace /(^\w+:\/\/test\.4plebs\.org\/[^\/]+\/thread\/\d+)\/.*/, '$1'
       el.setAttribute 'href', href
     ImageHost.fixLinks $$('.fileText > a, a.fileThumb', root2)
     for el in $$ 'img[src]', root2
@@ -65,7 +65,7 @@ Build.Test =
 
   testOne: (post) ->
     Build.Test.postsRemaining++
-    $.cache "#{location.protocol}//a.4cdn.org/#{post.board.ID}/thread/#{post.thread.ID}.json", ->
+    $.cache "#{location.protocol}//archive.4plebs.org/#{post.board.ID}/thread/#{post.thread.ID}.json", ->
       {posts} = @response
       Build.spoilerRange[post.board.ID] = posts[0].custom_spoiler
       for postData in posts

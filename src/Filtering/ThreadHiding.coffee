@@ -17,11 +17,11 @@ ThreadHiding =
       boardID: board.ID
       defaultValue: {}
     hiddenThreads[threadID] = true for threadID of hiddenThreads
-    localStorage.setItem "4chan-hide-t-#{board}", JSON.stringify hiddenThreads
+    localStorage.setItem "4plebs-hide-t-#{board}", JSON.stringify hiddenThreads
 
   catalogWatch: ->
     return unless $.hasStorage and Site.software is 'yotsuba'
-    @hiddenThreads = JSON.parse(localStorage.getItem "4chan-hide-t-#{g.BOARD}") or {}
+    @hiddenThreads = JSON.parse(localStorage.getItem "4plebs-hide-t-#{g.BOARD}") or {}
     Main.ready ->
       # 4chan's catalog sets the style to "display: none;" when hiding or unhiding a thread.
       new MutationObserver(ThreadHiding.catalogSave).observe $.id('threads'), {
@@ -31,7 +31,7 @@ ThreadHiding =
       }
 
   catalogSave: ->
-    hiddenThreads2 = JSON.parse(localStorage.getItem "4chan-hide-t-#{g.BOARD}") or {}
+    hiddenThreads2 = JSON.parse(localStorage.getItem "4plebs-hide-t-#{g.BOARD}") or {}
     for threadID of hiddenThreads2 when !(threadID of ThreadHiding.hiddenThreads)
       ThreadHiding.db.set
         boardID:  g.BOARD.ID

@@ -6,15 +6,15 @@ ImageHost =
       cb:   @node
 
   host: ->
-    'i.4cdn.org'
+    'i.4pcdn.org'
   flashHost: ->
-    'i.4cdn.org'
+    'i.4pcdn.org'
   thumbHost: ->
-    'i.4cdn.org'
+    'i.4pcdn.org'
   test: (hostname) ->
-    hostname is 'i.4cdn.org' or ImageHost.regex.test(hostname)
+    hostname is 'i.4pcdn.org' or ImageHost.regex.test(hostname)
 
-  regex: /^is\d*\.4chan(?:nel)?\.org$/
+  regex: /^img\.4plebs\.org$/
 
   node: ->
     return if @isClone

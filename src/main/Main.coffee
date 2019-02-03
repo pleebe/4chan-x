@@ -21,16 +21,16 @@ Main =
     try
       return if window.frameElement and window.frameElement.src in ['', 'about:blank']
 
-    # Detect multiple copies of 4chan X
+    # Detect multiple copies of 4plebs X
     return if doc and $.hasClass(doc, 'fourchan-x')
     $.asap docSet, ->
       $.addClass doc, 'fourchan-x', 'seaweedchan'
       $.addClass doc, "ua-#{$.engine}" if $.engine
-    $.on d, '4chanXInitFinished', ->
+    $.on d, '4plebsXInitFinished', ->
       if Main.expectInitFinished
         delete Main.expectInitFinished
       else
-        new Notice 'error', 'Error: Multiple copies of 4chan X are enabled.'
+        new Notice 'error', 'Error: Multiple copies of 4plebs X are enabled.'
         $.addClass doc, 'tainted'
 
     # Flatten default values from Config into Conf
@@ -45,7 +45,7 @@ Main =
       return
 
     # XXX Remove document-breaking ad
-    if location.hostname in ['boards.4chan.org', 'boards.4channel.org']
+    if location.hostname in ['test.4plebs.org', 'archive.4plebs.org']
       $.global ->
         fromCharCode0 = String.fromCharCode
         String.fromCharCode = ->
@@ -80,7 +80,7 @@ Main =
     Conf['siteSoftware'] = ''
 
     # Enforce JS whitelist
-    if /\.4chan(?:nel)?\.org$/.test(location.hostname) and !$$('script:not([src])', d).filter((s) -> /this\[/.test(s.textContent)).length
+    if /\.4plebs\.org$/.test(location.hostname) and !$$('script:not([src])', d).filter((s) -> /this\[/.test(s.textContent)).length
       ($.getSync or $.get) {'jsWhitelist': Conf['jsWhitelist']}, ({jsWhitelist}) ->
         $.addCSP "script-src #{jsWhitelist.replace(/^#.*$/mg, '').replace(/[\s;]+/g, ' ').trim()}"
 
@@ -89,7 +89,7 @@ Main =
     items[key] = undefined for key of Conf
     items['previousversion'] = undefined
     ($.getSync or $.get) items, (items) ->
-      if !$.perProtocolSettings and /\.4chan(?:nel)?\.org$/.test(location.hostname) and (items['Redirect to HTTPS'] ? Conf['Redirect to HTTPS']) and location.protocol isnt 'https:'
+      if !$.perProtocolSettings and /\.4plebs\.org$/.test(location.hostname) and (items['Redirect to HTTPS'] ? Conf['Redirect to HTTPS']) and location.protocol isnt 'https:'
         location.replace('https://' + location.host + location.pathname + location.search + location.hash)
         return
       $.asap docSet, ->
@@ -127,7 +127,7 @@ Main =
   initFeatures: ->
     {hostname, search} = location
     pathname = location.pathname.split /\/+/
-    g.BOARD = new Board pathname[1] unless hostname in ['www.4chan.org', 'www.4channel.org']
+    g.BOARD = new Board pathname[1] unless hostname in ['www.4plebs.org']
 
     $.global ->
       document.documentElement.classList.add 'js-enabled'
@@ -135,11 +135,11 @@ Main =
     Main.jsEnabled = $.hasClass doc, 'js-enabled'
 
     switch hostname
-      when 'www.4chan.org', 'www.4channel.org'
+      when 'www.4plebs.org'
         $.onExists doc, 'body', -> $.addStyle CSS.www
         Captcha.replace.init()
         return
-      when 'sys.4chan.org', 'sys.4channel.org'
+      when 'archive.4plebs.org'
         if pathname[2] is 'imgboard.php'
           if /\bmode=report\b/.test search
             Report.init()
@@ -245,7 +245,7 @@ Main =
     style = mainStyleSheet = styleSheets = null
 
     setStyle = ->
-      # Use preconfigured CSS for 4chan's default themes.
+      # Use preconfigured CSS for 4plebs's default themes.
       if Site.software is 'yotsuba'
         $.rmClass doc, style
         style = null
@@ -319,7 +319,7 @@ Main =
       Main.initThread() 
     else
       Main.expectInitFinished = true
-      $.event '4chanXInitFinished'
+      $.event '4plebsXInitFinished'
 
   initThread: ->
     s = Site.selectors
@@ -342,11 +342,11 @@ Main =
       Main.callbackNodesDB 'Post', posts, ->
         QuoteThreading.insert post for post in posts
         Main.expectInitFinished = true
-        $.event '4chanXInitFinished'
+        $.event '4plebsXInitFinished'
 
     else
       Main.expectInitFinished = true
-      $.event '4chanXInitFinished'
+      $.event '4plebsXInitFinished'
 
   parseThreads: (threadRoots, threads, posts, errors) ->
     for threadRoot in threadRoots
@@ -447,9 +447,9 @@ Main =
     softTask()
 
   handleErrors: (errors) ->
-    # Detect conflicts with 4chan X v2
+    # Detect conflicts with 4plebs X v2
     if d.body and $.hasClass(d.body, 'fourchan_x') and not $.hasClass(doc, 'tainted')
-      new Notice 'error', 'Error: Multiple copies of 4chan X are enabled.'
+      new Notice 'error', 'Error: Multiple copies of 4plebs X are enabled.'
       $.addClass doc, 'tainted'
 
     unless errors instanceof Array

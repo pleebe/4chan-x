@@ -54,7 +54,7 @@ $.ajax = do ->
     {type, whenModified, upCallbacks, form} = extra
     options.responseType ?= 'json' if /\.json$/.test url
     # XXX https://forums.lanik.us/viewtopic.php?f=64&t=24173&p=78310
-    url = url.replace /^((?:https?:)?\/\/(?:\w+\.)?4c(?:ha|d)n\.org)\/adv\//, '$1//adv/'
+    url = url.replace /^((?:https?:)?\/\/(?:\w+\.)?4(?:plebs|pcdn)\.org)\/adv\//, '$1/adv/'
     if whenModified
       params = []
       # XXX https://bugs.chromium.org/p/chromium/issues/detail?id=643659
@@ -72,7 +72,7 @@ $.ajax = do ->
       $.extend r, options
       $.extend r.upload, upCallbacks
       # connection error or content blocker
-      $.on r, 'error', -> (c.error "4chan X failed to load: #{url}" unless r.status)
+      $.on r, 'error', -> (c.error "4plebs X failed to load: #{url}" unless r.status)
       r.send form
     catch err
       # XXX Some content blockers in Firefox (e.g. Adblock Plus and NoScript) throw an exception instead of simulating a connection error.
@@ -418,7 +418,7 @@ $.crxWorking = ->
   else
     unless $.crxWarningShown
       msg = $.el 'div',
-        <%= html('4chan X seems to have been updated. You will need to <a href="javascript:;">reload</a> the page.') %>
+        <%= html('4plebs X seems to have been updated. You will need to <a href="javascript:;">reload</a> the page.') %>
       $.on $('a', msg), 'click', -> location.reload()
       new Notice 'warning', msg
       $.crxWarningShown = true

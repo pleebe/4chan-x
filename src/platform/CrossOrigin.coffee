@@ -12,7 +12,7 @@ eventPageRequest = do ->
 CrossOrigin =
   binary: (url, cb, headers={}) ->
     # XXX https://forums.lanik.us/viewtopic.php?f=64&t=24173&p=78310
-    url = url.replace /^((?:https?:)?\/\/(?:\w+\.)?4c(?:ha|d)n\.org)\/adv\//, '$1//adv/'
+    url = url.replace /^((?:https?:)?\/\/(?:\w+\.)?4(?:plebs|pcdn)\.org)\/adv\//, '$1/adv/'
     <% if (type === 'crx') { %>
     eventPageRequest url, 'arraybuffer', ({response, contentType, contentDisposition, error}) ->
       return cb null if error

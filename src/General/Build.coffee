@@ -1,5 +1,5 @@
 Build =
-  staticPath: '//s.4cdn.org/image/'
+  staticPath: '//test.4plebs.org/image/'
   gifIcon: if window.devicePixelRatio >= 2 then '@2x.gif' else '.gif'
   spoilerRange: {}
 
@@ -65,15 +65,12 @@ Build =
     if data.ext
       o.file =
         name:      (Build.unescape data.filename) + data.ext
-        url: if boardID is 'f'
-          "#{location.protocol}//#{ImageHost.flashHost()}/#{boardID}/#{encodeURIComponent data.filename}#{data.ext}"
-        else
-          "#{location.protocol}//#{ImageHost.host()}/#{boardID}/#{data.tim}#{data.ext}"
+        url:       data.media_link
         height:    data.h
         width:     data.w
         MD5:       data.md5
         size:      $.bytesToString data.fsize
-        thumbURL:  "#{location.protocol}//#{ImageHost.thumbHost()}/#{boardID}/#{data.tim}s.jpg"
+        thumbURL:  data.thumb_link
         theight:   data.tn_h
         twidth:    data.tn_w
         isSpoiler: !!data.spoiler
@@ -115,14 +112,14 @@ Build =
       capcodeLC = capcode.toLowerCase()
       if capcode is 'Founder'
         capcodePlural      = 'the Founder'
-        capcodeDescription = "4chan's Founder"
+        capcodeDescription = "Founder"
       else if capcode is 'Verified'
         capcodePlural      = 'Verified Users'
         capcodeDescription = ''
       else
         capcodeLong   = {'Admin': 'Administrator', 'Mod': 'Moderator'}[capcode] or capcode
         capcodePlural = "#{capcodeLong}s"
-        capcodeDescription = "a 4chan #{capcodeLong}"
+        capcodeDescription = "a #{capcodeLong}"
 
     postLink = Build.postURL boardID, threadID, ID
     quoteLink = if Build.sameThread boardID, threadID
@@ -135,7 +132,7 @@ Build =
     ### File Info ###
 
     if file
-      protocol = /^https?:(?=\/\/i\.4cdn\.org\/)/
+      protocol = /^https?:(?=\/\/i\.4pcdn\.org\/)/
       fileURL = file.url.replace protocol, ''
       shortFilename = Build.shortFilename file.name
       fileThumb = if file.isSpoiler then Build.spoilerThumb(boardID) else file.thumbURL.replace(protocol, '')

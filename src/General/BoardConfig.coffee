@@ -4,7 +4,7 @@ BoardConfig =
   init: ->
     now = Date.now()
     unless now - 2 * $.HOUR < (Conf['boardConfig'].lastChecked or 0) <= now and Conf['boardConfig'].troll_flags
-      $.ajax "#{location.protocol}//a.4cdn.org/boards.json",
+      $.ajax "#{location.protocol}//archive.4plebs.org/boards.json",
         onloadend: @load
     else
       {boards, troll_flags} = Conf['boardConfig']
@@ -45,8 +45,8 @@ BoardConfig =
   isSFW: (board) ->
     !!(@boards or Conf['boardConfig'].boards)[board]?.ws_board
 
-  domain: (board) ->
-    "boards.#{if BoardConfig.isSFW(board) then '4channel' else '4chan'}.org"
+  domain: ->
+    "test.4plebs.org"
 
   noAudio: (boardID) ->
     return false unless Site.software is 'yotsuba'

@@ -59,7 +59,7 @@ Unread =
     ) or 0
     Unread.readCount = 0
     Unread.readCount++ for ID in @posts.keys when +ID <= Unread.lastReadPost
-    $.one d, '4chanXInitFinished', Unread.ready
+    $.one d, '4plebsXInitFinished', Unread.ready
     $.on  d, 'PostsInserted',      Unread.onUpdate
     $.on  d, 'ThreadUpdate',       (e) -> Unread.update() if e.detail[404]
 

@@ -37,7 +37,7 @@ CatalogLinks =
 
   node: ->
     for a in $$ 'a', @nodes.comment
-      if m = a.href.match /^https?:\/\/(boards\.4chan(?:nel)?\.org\/[^\/]+)\/catalog(#s=.*)?/
+      if m = a.href.match /^https?:\/\/(test\.4plebs\.org\/[^\/]+)\/catalog(#s=.*)?/
         a.href = "//#{m[1]}/#{m[2] or '#catalog'}"
     return
 
@@ -59,18 +59,18 @@ CatalogLinks =
 
     for a in $$('a:not([data-only])', list)
       continue if (
-        a.hostname not in ['boards.4chan.org', 'boards.4channel.org', 'catalog.neet.tv'] or
+        a.hostname not in ['test.4plebs.org', 'archive.4plebs.org', 'catalog.neet.tv'] or
         !(board = a.pathname.split('/')[1]) or
-        board in ['f', 'status', '4chan'] or
+        board in ['f', 'status', '4plebs'] or
         a.pathname.split('/')[2] is 'archive' or
         $.hasClass a, 'external'
       )
 
       # Href is easier than pathname because then we don't have
       # conditions where External Catalog has been disabled between switches.
-      a.href = if Conf['Header catalog links'] then CatalogLinks.catalog(board) else "//#{BoardConfig.domain(board)}/#{board}/"
+      a.href = if Conf['Header catalog links'] then CatalogLinks.catalog(board) else "//archive.4plebs.org/#{board}/"
 
-      if a.dataset.indexOptions and a.hostname in ['boards.4chan.org', 'boards.4channel.org'] and a.pathname.split('/')[2] is ''
+      if a.dataset.indexOptions and a.hostname in ['test.4plebs.org', 'archive.4plebs.org'] and a.pathname.split('/')[2] is ''
         a.href += (if a.hash then '/' else '#') + a.dataset.indexOptions
     return
 
@@ -78,12 +78,12 @@ CatalogLinks =
     if Conf['External Catalog'] and board in ['a', 'c', 'g', 'biz', 'k', 'm', 'o', 'p', 'v', 'vg', 'vr', 'w', 'wg', 'cm', '3', 'adv', 'an', 'asp', 'cgl', 'ck', 'co', 'diy', 'fa', 'fit', 'gd', 'int', 'jp', 'lit', 'mlp', 'mu', 'n', 'out', 'po', 'sci', 'sp', 'tg', 'toy', 'trv', 'tv', 'vp', 'wsg', 'x', 'f', 'pol', 's4s', 'lgbt']
       "//catalog.neet.tv/#{board}/"
     else if Conf['JSON Index'] and Conf['Use <%= meta.name %> Catalog']
-      if location.hostname in ['boards.4chan.org', 'boards.4channel.org'] and g.BOARD.ID is board and g.VIEW is 'index' then '#catalog' else "//#{BoardConfig.domain(board)}/#{board}/#catalog"
+      if location.hostname in ['test.4plebs.org', 'archive.4plebs.org'] and g.BOARD.ID is board and g.VIEW is 'index' then '#catalog' else "//#{BoardConfig.domain(board)}/#{board}/#catalog"
     else
       "//#{BoardConfig.domain(board)}/#{board}/catalog"
 
   index: (board=g.BOARD.ID) ->
     if Conf['JSON Index'] and board isnt 'f'
-      if location.hostname in ['boards.4chan.org', 'boards.4channel.org'] and g.BOARD.ID is board and g.VIEW is 'index' then '#index' else "//#{BoardConfig.domain(board)}/#{board}/#index"
+      if location.hostname in ['test.4plebs.org', 'archive.4plebs.org'] and g.BOARD.ID is board and g.VIEW is 'index' then '#index' else "//#{BoardConfig.domain(board)}/#{board}/#index"
     else
       "//#{BoardConfig.domain(board)}/#{board}/"

@@ -22,9 +22,9 @@ Nav =
 
     $.add span, [prev, $.tn(' '), next]
     append = ->
-      $.off d, '4chanXInitFinished', append
+      $.off d, '4plebsXInitFinished', append
       $.add d.body, span
-    $.on d, '4chanXInitFinished', append
+    $.on d, '4plebsXInitFinished', append
 
   prev: ->
     if g.VIEW is 'thread'

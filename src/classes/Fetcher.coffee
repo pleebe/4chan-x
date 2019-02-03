@@ -4,7 +4,7 @@ class Fetcher
       @insert post
       return
 
-    # 4chan X catalog data
+    # 4plebs X catalog data
     if (post = Index.replyData?["#{@boardID}.#{@postID}"]) and (thread = g.threads["#{@boardID}.#{@threadID}"])
       board  = g.boards[@boardID]
       post = new Post Build.postFromObject(post, @boardID), thread, board
@@ -15,7 +15,7 @@ class Fetcher
 
     @root.textContent = "Loading post No.#{@postID}..."
     if @threadID
-      $.cache "#{location.protocol}//a.4cdn.org/#{@boardID}/thread/#{@threadID}.json", (e, isCached) =>
+      $.cache "#{location.protocol}//archive.4plebs.org/#{@boardID}/thread/#{@threadID}.json", (e, isCached) =>
         @fetchedPost e.target, isCached
     else
       @archivedPost()
@@ -39,11 +39,11 @@ class Fetcher
         $.addClass quote, 'forwardlink'
 
     # Set up flag CSS for cross-board links to boards with flags
-    if clone.nodes.flag and not (Fetcher.flagCSS or= $ 'link[href^="//s.4cdn.org/css/flags."]')
-      cssVersion = $('link[href^="//s.4cdn.org/css/"]')?.href.match(/\d+(?=\.css$)|$/)[0] or Date.now()
+    if clone.nodes.flag and not (Fetcher.flagCSS or= $ 'link[href^="//test.4plebs.org/css/flags."]')
+      cssVersion = $('link[href^="//test.4plebs.org/css/"]')?.href.match(/\d+(?=\.css$)|$/)[0] or Date.now()
       Fetcher.flagCSS = $.el 'link',
         rel: 'stylesheet'
-        href: "//s.4cdn.org/css/flags.#{cssVersion}.css"
+        href: "//test.4plebs.org/css/flags.#{cssVersion}.css"
       $.add d.head, Fetcher.flagCSS
 
     $.rmAll @root
@@ -78,7 +78,7 @@ class Fetcher
     if post.no isnt @postID
       # Cached requests can be stale and must be rechecked.
       if isCached
-        api = "#{location.protocol}//a.4cdn.org/#{@boardID}/thread/#{@threadID}.json"
+        api = "#{location.protocol}//archive.4plebs.org/#{@boardID}/thread/#{@threadID}.json"
         $.cleanCache (url) -> url is api
         $.cache api, (e) =>
           @fetchedPost e.target, false

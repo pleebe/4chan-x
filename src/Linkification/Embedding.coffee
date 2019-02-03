@@ -8,7 +8,7 @@ Embedding =
       @dialog = UI.dialog 'embedding',
         <%= readHTML('Embed.html') %>
       @media = $ '#media-embed', @dialog
-      $.one d, '4chanXInitFinished', @ready
+      $.one d, '4plebsXInitFinished', @ready
       $.on  d, 'IndexRefreshInternal', ->
         g.posts.forEach (post) ->
           for post in [post, post.clones...]
@@ -16,7 +16,7 @@ Embedding =
               Embedding.cb.catalogRemove.call embed
           return
     if Conf['Link Title']
-      $.on d, '4chanXInitFinished PostsInserted', ->
+      $.on d, '4plebsXInitFinished PostsInserted', ->
         for key, service of Embedding.types when service.title?.batchSize
           Embedding.flushTitles service.title
         return

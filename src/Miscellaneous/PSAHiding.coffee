@@ -2,7 +2,7 @@ PSAHiding =
   init: ->
     return unless Conf['Announcement Hiding']
     $.addClass doc, 'hide-announcement'
-    $.one d, '4chanXInitFinished', @setup
+    $.one d, '4plebsXInitFinished', @setup
 
   setup: ->
     if not (psa = PSAHiding.psa = $.id 'globalMessage')

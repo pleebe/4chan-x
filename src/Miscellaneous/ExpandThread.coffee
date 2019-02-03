@@ -52,7 +52,7 @@ ExpandThread =
   expand: (thread, a) ->
     ExpandThread.statuses[thread] = status = {}
     a.textContent = Build.summaryText '...', a.textContent.match(/\d+/g)...
-    status.req = $.cache "#{location.protocol}//a.4cdn.org/#{thread.board}/thread/#{thread}.json", ->
+    status.req = $.cache "#{location.protocol}//archive.4plebs.org/#{thread.board}/thread/#{thread}.json", ->
       delete status.req
       ExpandThread.parse @, thread, a
 

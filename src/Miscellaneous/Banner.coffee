@@ -8,7 +8,7 @@ Banner =
     $.asap (-> d.body), ->
       $.asap (-> $ 'hr'), Banner.ready
 
-    # Let 4chan's JS load the banner if enabled; otherwise, load it ourselves.
+    # Let 4plebs's JS load the banner if enabled; otherwise, load it ourselves.
     if g.BOARD.ID isnt 'f'
       Main.ready -> $.queueTask Banner.load
 
@@ -30,8 +30,8 @@ Banner =
     bannerCnt = $.id 'bannerCnt'
     unless bannerCnt.firstChild
       img = $.el 'img',
-        alt: '4chan'
-        src: '//s.4cdn.org/image/title/' + bannerCnt.dataset.src
+        alt: '4plebs'
+        src: '//test.4plebs.org/image/title/' + bannerCnt.dataset.src
       $.add bannerCnt, img
 
   setTitle: (title) ->
@@ -47,7 +47,7 @@ Banner =
         Banner.choices = Banner.banners.slice()
       i = Math.floor(Banner.choices.length * Math.random())
       banner = Banner.choices.splice i, 1
-      $('img', @parentNode).src = "//s.4cdn.org/image/title/#{banner}"
+      $('img', @parentNode).src = "//test.4plebs.org/image/title/#{banner}"
 
     click: (e) ->
       return unless (e.ctrlKey or e.metaKey)

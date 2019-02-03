@@ -9,14 +9,14 @@ class DataBoard
     # Chrome also fires the onChanged callback on the current tab,
     # so we only start syncing when we're ready.
     init = =>
-      $.off d, '4chanXInitFinished', init
+      $.off d, '4plebsXInitFinished', init
       @sync = sync
-    $.on d, '4chanXInitFinished', init
+    $.on d, '4plebsXInitFinished', init
 
   initData: (@data) ->
     if @data.boards
       {boards, lastChecked} = @data
-      @data['4chan.org'] = {boards, lastChecked}
+      @data['4plebs.org'] = {boards, lastChecked}
       delete @data.boards
       delete @data.lastChecked
     @data[Site.hostname] or= boards: {}
@@ -131,10 +131,10 @@ class DataBoard
     return
 
   ajaxClean: (boardID) ->
-    $.cache "#{location.protocol}//a.4cdn.org/#{boardID}/threads.json", (e1) =>
+    $.cache "#{location.protocol}//archive.4plebs.org/#{boardID}/threads.json", (e1) =>
       return unless e1.target.status is 200
       response1 = e1.target.response
-      $.cache "#{location.protocol}//a.4cdn.org/#{boardID}/archive.json", (e2) =>
+      $.cache "#{location.protocol}//archive.4plebs.org/#{boardID}/archive.json", (e2) =>
         return unless e2.target.status is 200 or boardID in ['b', 'f', 'trash', 'bant']
         @ajaxCleanParse boardID, response1, e2.target.response
 

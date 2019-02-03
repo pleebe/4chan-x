@@ -83,7 +83,7 @@ ThreadUpdater =
 
     $.on d,      'QRPostSuccessful', ThreadUpdater.cb.checkpost
     $.on d,      'visibilitychange', ThreadUpdater.cb.visibility
-
+    ThreadUpdater.update()
     ThreadUpdater.setInterval()
 
   ###
@@ -137,8 +137,8 @@ ThreadUpdater =
           else
             ThreadUpdater.setInterval()
         when 404
-          # XXX workaround for 4chan sending false 404s
-          $.ajax "#{location.protocol}//a.4cdn.org/#{ThreadUpdater.thread.board}/catalog.json", onloadend: ->
+          # XXX workaround for 4plebs sending false 404s
+          $.ajax "#{location.protocol}//archive.4plebs.org/#{ThreadUpdater.thread.board}/catalog.json", onloadend: ->
             if @status is 200
               confirmed = true
               for page in @response
@@ -231,7 +231,7 @@ ThreadUpdater =
     clearTimeout ThreadUpdater.timeoutID
     ThreadUpdater.set 'timer', '...', 'loading'
     ThreadUpdater.req?.abort()
-    ThreadUpdater.req = $.ajax "#{location.protocol}//a.4cdn.org/#{ThreadUpdater.thread.board}/thread/#{ThreadUpdater.thread}.json",
+    ThreadUpdater.req = $.ajax "#{location.protocol}//archive.4plebs.org/#{ThreadUpdater.thread.board}/thread/#{ThreadUpdater.thread}.json",
       onloadend: ThreadUpdater.cb.load
       timeout:   $.MINUTE
     ,

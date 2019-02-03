@@ -1,8 +1,8 @@
 Site =
   defaultProperties:
-    '4chan.org':    {software: 'yotsuba'}
-    '4channel.org': {software: 'yotsuba'}
-    '4cdn.org':     {software: 'yotsuba'}
+    'test.4plebs.org':    {software: 'yotsuba'}
+    'archive.4plebs.org': {software: 'yotsuba'}
+    '4pcdn.org':     {software: 'yotsuba'}
 
   init: (cb) ->
     $.extend Conf['siteProperties'], Site.defaultProperties
@@ -32,5 +32,5 @@ Site =
   set: (@hostname) ->
     @properties = Conf['siteProperties'][@hostname]
     @software = @properties.software
-    @hostname = '4chan.org' if @software is 'yotsuba'
+    @hostname = '4plebs.org' if @software is 'yotsuba'
     $.extend @, SW[@software]

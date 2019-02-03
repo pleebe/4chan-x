@@ -1,6 +1,6 @@
 Settings =
   init: ->
-    # 4chan X settings link
+    # 4plebs X settings link
     link = $.el 'a',
       className:   'settings-link fa fa-wrench'
       textContent: 'Settings'
@@ -23,14 +23,14 @@ Settings =
 
     if Conf['Disable Native Extension']
       if $.hasStorage
-        # Run in page context to handle case where 4chan X has localStorage access but not the page.
-        # (e.g. Pale Moon 26.2.2, GM 3.8, cookies disabled for 4chan only)
+        # Run in page context to handle case where 4plebs X has localStorage access but not the page.
+        # (e.g. Pale Moon 26.2.2, GM 3.8, cookies disabled for 4plebs only)
         $.global ->
           try
-            settings = JSON.parse(localStorage.getItem '4chan-settings') or {}
+            settings = JSON.parse(localStorage.getItem '4plebs-settings') or {}
             return if settings.disableAll
             settings.disableAll = true
-            localStorage.setItem '4chan-settings', JSON.stringify settings
+            localStorage.setItem '4plebs-settings', JSON.stringify settings
           catch
             Object.defineProperty window, 'Config', {value: {disableAll: true}}
       else
@@ -118,7 +118,7 @@ Settings =
         cb $.el 'li',
           <%= html(
             'To protect yourself from <a href="${url}" target="_blank">malicious ads</a>,' +
-            ' you should <a href="https://github.com/gorhill/uBlock#ublock-origin" target="_blank">block ads</a> on 4chan.'
+            ' you should <a href="https://github.com/gorhill/uBlock#ublock-origin" target="_blank">block ads</a> on 4plebs.'
           ) %>
 
   main: (section) ->
@@ -201,7 +201,7 @@ Settings =
       $.get 'hiddenThreads', {}, ({hiddenThreads}) ->
         if $.hasStorage and Site.software is 'yotsuba'
           for boardID of hiddenThreads.boards
-            localStorage.removeItem "4chan-hide-t-#{boardID}"
+            localStorage.removeItem "4plebs-hide-t-#{boardID}"
         ($.delete ['hiddenThreads', 'hiddenPosts'])
     $.after $('input[name="Stubs"]', section).parentNode.parentNode, div
 
@@ -254,7 +254,7 @@ Settings =
         data
       data = convertSettings data,
         # General confs
-        'Disable 4chan\'s extension': 'Disable Native Extension'
+        'Disable 4plebs\'s extension': 'Disable Native Extension'
         'Comment Auto-Expansion': ''
         'Remove Slug': ''
         'Check for Updates': ''
@@ -452,7 +452,7 @@ Settings =
           set 'jsWhitelist', data['jsWhitelist'] + '\n\nhttps://cdnjs.cloudflare.com'
     if compareString < '00001.00014.00000.00006'
       if data['siteSoftware']?
-        set 'siteSoftware', data['siteSoftware'] + '\n4cdn.org yotsuba'
+        set 'siteSoftware', data['siteSoftware'] + '\n4plebs.org yotsuba'
     if compareString < '00001.00014.00003.00002'
       if data['sauces']?
         set 'sauces', data['sauces'].replace(/^(#?\s*)https:\/\/whatanime\.ga\//mg, '$1https://trace.moe/')
@@ -463,7 +463,7 @@ Settings =
       for db in DataBoard.keys
         if data[db]?.boards
           {boards, lastChecked} = data[db]
-          data[db]['4chan.org'] = {boards, lastChecked}
+          data[db]['4plebs.org'] = {boards, lastChecked}
           delete data[db].boards
           delete data[db].lastChecked
           set db, data[db]

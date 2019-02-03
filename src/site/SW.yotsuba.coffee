@@ -2,8 +2,8 @@ SW.yotsuba =
   isOPContainerThread: false
 
   urls:
-    thread:     ({boardID, threadID}) -> "#{location.protocol}//#{BoardConfig.domain(boardID)}/#{boardID}/thread/#{threadID}"
-    threadJSON: ({boardID, threadID}) -> "#{location.protocol}//a.4cdn.org/#{boardID}/thread/#{threadID}.json"
+    thread:     ({boardID, threadID}) -> "#{location.protocol}//archive.4plebs.org/#{boardID}/thread/#{threadID}"
+    threadJSON: ({boardID, threadID}) -> "#{location.protocol}//archive.4plebs.org/#{boardID}/thread/#{threadID}.json"
 
   selectors:
     board:         '.board'
@@ -49,7 +49,7 @@ SW.yotsuba =
   regexp:
     quotelink:
       ///
-        ^https?://boards\.4chan(?:nel)?\.org/+
+        ^https?://(?:archive|test)\.4plebs\.org/+
         ([^/]+) # boardID
         /+thread/+
         (\d+)   # threadID
@@ -60,27 +60,27 @@ SW.yotsuba =
         $
       ///
     quotelinkHTML:
-      /<a [^>]*\bhref="(?:(?:\/\/boards\.4chan(?:nel)?\.org)?\/([^\/]+)\/thread\/)?(\d+)?(?:#p(\d+))?"/g
+      /<a [^>]*\bhref="(?:(?:\/\/(?:archive|test)\.4plebs\.org)?\/([^\/]+)\/thread\/)?(\d+)?(?:#p(\d+))?"/g
 
   bgColoredEl: ->
     $.el 'div', className: 'reply'
 
   isThisPageLegit: ->
     # not 404 error page or similar.
-    location.hostname in ['boards.4chan.org', 'boards.4channel.org'] and
+    location.hostname in ['test.4plebs.org', 'archive.4plebs.org'] and
     d.doctype and
     !$('link[href*="favicon-status.ico"]', d.head) and
-    d.title not in ['4chan - Temporarily Offline', '4chan - Error', '504 Gateway Time-out', 'MathJax Equation Source']
+    d.title not in ['4plebs - Temporarily Offline', '4plebs - Error', '504 Gateway Time-out', 'MathJax Equation Source']
 
   is404: ->
     # XXX Sometimes threads don't 404 but are left over as stubs containing one garbage reply post.
-    d.title in ['4chan - Temporarily Offline', '4chan - 404 Not Found'] or (g.VIEW is 'thread' and $('.board') and not $('.opContainer'))
+    d.title in ['4plebs - Temporarily Offline', '4plebs - 404 Not Found'] or (g.VIEW is 'thread' and $('.board') and not $('.opContainer'))
 
   isIncomplete: ->
     return g.VIEW in ['index', 'thread'] and not $('.board + *')
 
   isAuxiliaryPage: ->
-    location.hostname not in ['boards.4chan.org', 'boards.4channel.org']
+    location.hostname not in ['test.4plebs.org', 'archive.4plebs.org']
 
   scriptData: ->
     for script in $$ 'script:not([src])', d.head
@@ -95,7 +95,7 @@ SW.yotsuba =
 
     if g.BOARD.ID is 'f' and thread.OP.file
       {file} = thread.OP
-      $.ajax "#{location.protocol}//a.4cdn.org/f/thread/#{thread}.json",
+      $.ajax "#{location.protocol}//archive.4plebs.org/f/thread/#{thread}.json",
         timeout: $.MINUTE
         onloadend: ->
           if @response
@@ -145,4 +145,4 @@ SW.yotsuba =
     return
 
   hasCORS: (url) ->
-    url.split('/')[...3].join('/') is location.protocol + '//a.4cdn.org'
+    url.split('/')[...3].join('/') is location.protocol + '//archive.4plebs.org'

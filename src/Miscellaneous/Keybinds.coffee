@@ -6,12 +6,12 @@ Keybinds =
       $.sync hotkey, Keybinds.sync
 
     init = ->
-      $.off d, '4chanXInitFinished', init
+      $.off d, '4plebsXInitFinished', init
       $.on d, 'keydown', Keybinds.keydown
       for node in $$ '[accesskey]'
         node.removeAttribute 'accesskey'
       return
-    $.on d, '4chanXInitFinished', init
+    $.on d, '4plebsXInitFinished', init
 
   sync: (key, hotkey) ->
     Conf[hotkey] = key

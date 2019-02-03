@@ -114,7 +114,7 @@ Header =
         cs.title = cs.textContent = 'Catalog Settings'
         cs.className = 'fa fa-book'
       else
-        cs.title = cs.textContent = '4chan Settings'
+        cs.title = cs.textContent = '4plebs Settings'
         cs.className = 'native-settings'
       $.on cs, 'click', () ->
         $.id('settingsWindowLink').click()
@@ -227,7 +227,7 @@ Header =
 
     boardID = t.split('-')[0]
     if boardID is 'current'
-      if location.hostname in ['boards.4chan.org', 'boards.4channel.org']
+      if location.hostname in ['test.4plebs.org', 'archive.4plebs.org']
         boardID = g.BOARD.ID
       else
         a = $.el 'a',
@@ -243,8 +243,8 @@ Header =
     a = do ->
       if boardID is '@'
         return $.el 'a',
-          href: 'https://twitter.com/4chan'
-          title: '4chan Twitter'
+          href: 'https://twitter.com/4plebs'
+          title: '4plebs Twitter'
           textContent: '@'
 
       a = $.el 'a',
@@ -272,7 +272,7 @@ Header =
 
     if Conf['JSON Index'] and indexOptions
       a.dataset.indexOptions = indexOptions
-      if a.hostname in ['boards.4chan.org', 'boards.4channel.org'] and a.pathname.split('/')[2] is ''
+      if a.hostname in ['test.4plebs.org', 'archive.4plebs.org'] and a.pathname.split('/')[2] is ''
         a.href += (if a.hash then '/' else '#') + indexOptions
 
     if /-archive/.test t
@@ -283,7 +283,7 @@ Header =
 
     if /-expired/.test t
       if boardID not in ['b', 'f', 'trash', 'bant']
-        a.href = "//#{BoardConfig.domain(boardID)}/#{boardID}/archive"
+        a.href = "//archive.4plebs.org/#{boardID}/archive"
       else
         return a.firstChild # Its text node.
 
@@ -543,7 +543,7 @@ Header =
     el = $.el 'span',
       <%= html(
         meta.name + ' needs your permission to show desktop notifications. ' +
-        '[<a href="' + meta.faq + '#why-is-4chan-x-asking-for-permission-to-show-desktop-notifications" target="_blank">FAQ</a>]<br>' +
+        '[<a href="#" target="_blank">FAQ</a>]<br>' +
         '<button>Authorize</button> or <button>Disable</button>'
       ) %>
     [authorize, disable] = $$ 'button', el

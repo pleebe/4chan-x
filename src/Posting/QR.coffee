@@ -28,7 +28,7 @@ QR =
 
     @captcha = Captcha.v2
 
-    $.on d, '4chanXInitFinished', -> BoardConfig.ready QR.initReady
+    $.on d, '4plebsXInitFinished', -> BoardConfig.ready QR.initReady
 
     Callbacks.Post.push
       name: 'Quick Reply'
@@ -245,7 +245,7 @@ QR =
     $.el 'span',
       <%= html(
         'Connection error while posting. ' +
-        '[<a href="' + meta.faq + '#connection-errors" target="_blank">More info</a>]'
+        '[<a href="#" target="_blank">More info</a>]'
       ) %>
 
   notifications: []
@@ -363,7 +363,7 @@ QR =
 
   openError: ->
     div = $.el 'div'
-    $.extend div, <%= html('Could not open file. [<a href="' + meta.faq + '#error-reading-metadata" target="_blank">More info</a>]') %>
+    $.extend div, <%= html('Could not open file. [<a href="#" target="_blank">More info</a>]') %>
     QR.error div
 
   setFile: (e) ->

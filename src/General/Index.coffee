@@ -6,7 +6,7 @@ Index =
     return unless g.VIEW is 'index' and g.BOARD.ID isnt 'f'
 
     # For IndexRefresh events
-    $.one d, '4chanXInitFinished', @cb.initFinished
+    $.one d, '4plebsXInitFinished', @cb.initFinished
     $.on  d, 'PostsInserted',      @cb.postsInserted
 
     return unless Conf['JSON Index']
@@ -593,7 +593,7 @@ Index =
       location.reload()
       return
 
-    Index.req = $.ajax "#{location.protocol}//a.4cdn.org/#{g.BOARD}/catalog.json",
+    Index.req = $.ajax "#{location.protocol}//archive.4plebs.org/#{g.BOARD}/catalog.json",
       onabort:   Index.load
       onloadend: Index.load
     ,
@@ -652,7 +652,7 @@ Index =
     RelativeDates.update timeEl
 
   parse: (pages) ->
-    $.cleanCache (url) -> /^https?:\/\/a\.4cdn\.org\//.test url
+    $.cleanCache (url) -> /^https?:\/\/archive\.4plebs\.org\//.test url
     Index.parseThreadList pages
     Index.changed.threads = true
     Index.pageLoad()

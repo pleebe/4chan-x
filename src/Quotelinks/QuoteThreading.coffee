@@ -20,7 +20,7 @@ QuoteThreading =
     $.on @input, 'change', @setEnabled
     $.on @input, 'change', @rethread
     $.on @threadNewLink.firstElementChild, 'click', @rethread
-    $.on d, '4chanXInitFinished', => @ready = true
+    $.on d, '4plebsXInitFinished', => @ready = true
 
     Header.menu.addEntry @entry =
       el:    @controls
