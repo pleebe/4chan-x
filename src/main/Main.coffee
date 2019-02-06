@@ -249,7 +249,7 @@ Main =
       if Site.software is 'yotsuba'
         $.rmClass doc, style
         style = null
-        if styleSheet is not null
+        if styleSheets is not null
           for styleSheet in styleSheets
             if styleSheet.href is mainStyleSheet?.href
               style = styleSheet.title.toLowerCase().replace('new', '').trim().replace /\s+/g, '-'

@@ -792,7 +792,7 @@ Config =
     'Catalog Hover Toggle':  [true,  'Turn "Catalog hover expand" on and off by clicking in the catalog.']
     'Pin Watched Threads':   [false, 'Move watched threads to the start of the index.']
     'Anchor Hidden Threads': [true,  'Move hidden threads to the end of the index.']
-    'Refreshed Navigation':  [false, 'Refresh index when navigating through pages.']
+    'Refreshed Navigation':  [true, 'Refresh index when navigating through pages.']
 
   Header:
     'Fixed Header':               true

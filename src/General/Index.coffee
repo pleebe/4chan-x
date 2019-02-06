@@ -44,7 +44,7 @@ Index =
       title: 'Refresh'
       href: 'javascript:;'
       textContent: 'Refresh Index'
-    $.on @button, 'click', -> Index.update()
+    $.on @button, 'click', -> Index.update(false, Index.currentPage)
     Header.addShortcut 'index-refresh', @button, 590
 
     # Header "Index Navigation" submenu
@@ -135,7 +135,7 @@ Index =
     $('.cataloglink a', @pagelist).href = CatalogLinks.catalog()
     $.on @pagelist, 'click', @cb.pageNav
 
-    @update true
+    @update true, @currentPage
 
     $.onExists doc, 'title + *', ->
       d.title = d.title.replace /\ -\ Page\ \d+/, ''
@@ -335,7 +335,7 @@ Index =
         # page load or hash change
         nCommands = Index.processHash()
         if Conf['Refreshed Navigation'] and nCommands
-          Index.update()
+          Index.update(false, page)
         else
           Index.pageLoad()
 
@@ -354,8 +354,8 @@ Index =
       Index.userPageNav +a.pathname.split(/\/+/)[2] or 1
 
     refreshFront: ->
-      Index.pushState {page: 1}
-      Index.update()
+      Index.pushState {page: Index.currentPage}
+      Index.update(false, Index.currentPage)
 
     catalogReplies: ->
       if Conf['Show Replies'] and $.hasClass(doc, 'catalog-hover-expand') and !@catalogView.nodes.replies
@@ -381,7 +381,7 @@ Index =
   userPageNav: (page) ->
     Index.pushState {page}
     if Conf['Refreshed Navigation']
-      Index.update()
+      Index.update(false, page)
     else
       Index.pageLoad()
 
@@ -572,7 +572,7 @@ Index =
     else
       "#{hiddenCount} hidden threads"
 
-  update: (firstTime) ->
+  update: (firstTime, page=0) ->
     Index.req?.abort()
     Index.notice?.close()
 
@@ -593,7 +593,9 @@ Index =
       location.reload()
       return
 
-    Index.req = $.ajax "#{location.protocol}//archive.4plebs.org/#{g.BOARD}/catalog.json",
+    if page!=0
+      page--
+    Index.req = $.ajax "#{location.protocol}//archive.4plebs.org/#{g.BOARD}/single-catalog-#{page}.json",
       onabort:   Index.load
       onloadend: Index.load
     ,
@@ -658,7 +660,7 @@ Index =
     Index.pageLoad()
 
   parseThreadList: (pages) ->
-    Index.pagesNum          = pages.length
+    Index.pagesNum          = pages[0]?.pages_total;
     Index.threadsNumPerPage = pages[0]?.threads.length or 1
     Index.liveThreadData    = pages.reduce ((arr, next) -> arr.concat next.threads), []
     Index.liveThreadIDs     = Index.liveThreadData.map (data) -> data.no
@@ -882,7 +884,10 @@ Index =
   threadsOnPage: (pageNum) ->
     nodesPerPage = Index.threadsNumPerPage
     offset = nodesPerPage * (pageNum - 1)
-    Index.sortedThreadIDs[offset ... offset + nodesPerPage]
+    if Conf['Refreshed Navigation']
+      Index.sortedThreadIDs[0 ... nodesPerPage]
+    else
+      Index.sortedThreadIDs[offset ... offset + nodesPerPage]
 
   buildStructure: (threadIDs) ->
     threads = Index.buildThreads threadIDs, false, Conf['Show Replies']

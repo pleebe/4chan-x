@@ -87,7 +87,7 @@ crx_contents := script.js eventPage.js icon16.png icon48.png icon128.png manifes
 
 release := \
  $(foreach f, \
-  $(foreach c,. -beta.,$(name)$(c)crx updates$(c)xml updates$(c)json $(name)$(c)user.js $(name)$(c)meta.js) \
+  $(foreach c,. -beta.,$(name)$(c)crx updates$(c)xml updates$(c)json $(name)$(c)user.js $(name)$(c)meta.js $(name)$(c)site.js) \
   $(name)-noupdate.crx \
   $(name)-noupdate.user.js \
   $(name).zip \
@@ -201,6 +201,10 @@ testbuilds/$(name)$1.meta.js : src/meta/metadata.js src/meta/icon48.png version.
 testbuilds/$(name)$1.user.js : testbuilds/$(name)$1.meta.js tmp/meta-newline.js $$(call pieces,userscript) | .events/compile
 	@echo Concatenating: $$@
 	@$$(call CAT,testbuilds/$(name)$1.meta.js tmp/meta-newline.js $$(call QUOTE,$$(call pieces,userscript)),$$@)
+
+testbuilds/$(name)$1.site.js : tmp/meta-newline.js $$(call pieces,userscript) | .events/compile
+	@echo Concatenating: $$@
+	@$$(call CAT,tmp/meta-newline.js $$(call QUOTE,$$(call pieces,userscript)),$$@)
 
 endef
 
