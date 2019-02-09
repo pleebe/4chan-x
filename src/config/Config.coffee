@@ -402,7 +402,7 @@ Config =
         1
       ]
       'Page Count in Stats': [
-        true
+        false
         'Display the page count in the thread stats.'
         1
       ]

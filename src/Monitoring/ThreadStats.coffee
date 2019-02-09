@@ -74,7 +74,7 @@ ThreadStats =
       ThreadStats.pageCountEl.textContent = 'Dead'
       $.addClass ThreadStats.pageCountEl, 'warning'
       return
-    ThreadStats.timeout = setTimeout ThreadStats.fetchPage, 2 * $.MINUTE
+    ThreadStats.timeout = setTimeout ThreadStats.fetchPage, 200 * $.MINUTE
     $.ajax "#{location.protocol}//archive.4plebs.org/#{ThreadStats.thread.board}/threads.json", onload: ThreadStats.onThreadsLoad,
       whenModified: 'ThreadStats'
 
@@ -101,4 +101,4 @@ ThreadStats =
     # If thread data is stale (modification date given < time of last post), try again.
     if g.BOARD.ID isnt 'f' and ThreadStats.lastPost > ThreadStats.lastPageUpdate and ThreadStats.pageCountEl?.textContent isnt '1'
       clearTimeout ThreadStats.timeout
-      ThreadStats.timeout = setTimeout ThreadStats.fetchPage, 5 * $.SECOND
+      ThreadStats.timeout = setTimeout ThreadStats.fetchPage, 500 * $.SECOND

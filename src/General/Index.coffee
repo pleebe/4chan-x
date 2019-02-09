@@ -521,15 +521,28 @@ Index =
   buildPagelist: ->
     pagesRoot = $ '.pages', Index.pagelist
     maxPageNum = Index.getMaxPageNum()
-    if pagesRoot.childElementCount isnt maxPageNum
-      nodes = []
-      for i in [1..maxPageNum] by 1
-        a = $.el 'a',
-          textContent: i
-          href: if i is 1 then './' else i
-        nodes.push $.tn('['), a, $.tn '] '
-      $.rmAll pagesRoot
-      $.add pagesRoot, nodes
+    pageNum    = Index.currentPage
+    realMaxPageNum = maxPageNum
+    if (maxPageNum > 15)
+      maxPageNum = 15
+    #if pagesRoot.childElementCount isnt maxPageNum
+    nodes = []
+    for i in [1..maxPageNum] by 1
+      a = $.el 'a',
+        textContent: i
+        href: if i is 1 then './' else i
+      nodes.push $.tn('['), a, $.tn '] '
+    if pageNum >= maxPageNum-5 and pageNum <= realMaxPageNum
+      for i in [maxPageNum+1..pageNum+5] by 1
+        if realMaxPageNum >= i
+          a = $.el 'a',
+            textContent: i
+            href: if i is 1 then './' else i
+          nodes.push $.tn('['), a, $.tn '] '
+    if realMaxPageNum isnt maxPageNum and realMaxPageNum isnt pageNum
+      nodes.push $.tn('[...] ')
+    $.rmAll pagesRoot
+    $.add pagesRoot, nodes
 
   setPage: ->
     pageNum    = Index.currentPage

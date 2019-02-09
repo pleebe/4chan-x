@@ -215,7 +215,7 @@ class Post
     # Get quotelinks/backlinks to this post
     # and paint them (Dead).
     for quotelink in Get.allQuotelinksLinkingTo @ when not $.hasClass quotelink, 'deadlink'
-      $.add quotelink, Post.deadMark.cloneNode(true)
+      # $.add quotelink, Post.deadMark.cloneNode(true)
       $.addClass quotelink, 'deadlink'
     return
 
