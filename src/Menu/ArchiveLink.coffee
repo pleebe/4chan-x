@@ -1,6 +1,7 @@
 ArchiveLink =
   init: ->
     return unless g.VIEW in ['index', 'thread'] and Conf['Menu'] and Conf['Archive Link']
+    return if Build.getCookie('theme') is 'foolfuuka'
 
     div = $.el 'div',
       textContent: 'Archive'

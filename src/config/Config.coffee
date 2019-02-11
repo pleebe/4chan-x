@@ -795,7 +795,7 @@ Config =
     'Refreshed Navigation':  [true, 'Refresh index when navigating through pages.']
 
   Header:
-    'Fixed Header':               true
+    'Fixed Header':               false
     'Header auto-hide':           false
     'Header auto-hide on scroll': false
     'Bottom Header':              false
@@ -823,8 +823,6 @@ Config =
       external-text:\"tv\",\"//test.4plebs.org/tv/\" /
       external-text:\"x\",\"//test.4plebs.org/x/\" ]
       [ external-text:\"plebs\",\"//test.4plebs.org/plebs/\" ]
-      [ external-text:\"FAQ\",\"//archive.4plebs.org/_/articles/faq/\" ]
-      [ @ ]
   """
 
   QR:

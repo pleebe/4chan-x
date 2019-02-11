@@ -124,6 +124,7 @@ Header =
 
   bar: $.el 'div',
     id: 'header-bar'
+    className: 'letters'
 
   noticesRoot: $.el 'div',
     id: 'notifications'

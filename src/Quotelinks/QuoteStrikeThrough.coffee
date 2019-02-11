@@ -2,6 +2,7 @@ QuoteStrikeThrough =
   init: ->
     return unless g.VIEW in ['index', 'thread'] and
       (Conf['Reply Hiding Buttons'] or (Conf['Menu'] and Conf['Reply Hiding Link']) or Conf['Filter'])
+    return if Build.getCookie('theme') is 'foolfuuka'
 
     Callbacks.Post.push
       name: 'Strike-through Quotes'

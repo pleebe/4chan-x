@@ -3,6 +3,7 @@ DeleteLink =
 
   init: ->
     return unless g.VIEW in ['index', 'thread'] and Conf['Menu'] and Conf['Delete Link']
+    return if Build.getCookie('theme') is 'foolfuuka'
 
     div = $.el 'div',
       className: 'delete-link'

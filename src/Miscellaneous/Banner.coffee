@@ -14,6 +14,8 @@ Banner =
 
   ready: ->
     banner = $ ".boardBanner"
+    if banner is null
+      return
     {children} = banner
 
     if g.VIEW is 'thread' and Conf['Remove Thread Excerpt']
@@ -28,6 +30,8 @@ Banner =
 
   load: ->
     bannerCnt = $.id 'bannerCnt'
+    if bannerCnt is null
+      return
     unless bannerCnt.firstChild
       img = $.el 'img',
         alt: '4plebs'

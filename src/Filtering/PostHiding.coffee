@@ -1,6 +1,7 @@
 PostHiding =
   init: ->
     return if g.VIEW not in ['index', 'thread'] or !Conf['Reply Hiding Buttons'] and !(Conf['Menu'] and Conf['Reply Hiding Link'])
+    return if Build.getCookie('theme') is 'foolfuuka'
 
     if Conf['Reply Hiding Buttons']
       $.addClass doc, "reply-hide"
@@ -36,6 +37,7 @@ PostHiding =
   menu:
     init: ->
       return if g.VIEW not in ['index', 'thread'] or !Conf['Menu'] or !Conf['Reply Hiding Link']
+      return if Build.getCookie('theme') is 'foolfuuka'
 
       # Hide
       div = $.el 'div',

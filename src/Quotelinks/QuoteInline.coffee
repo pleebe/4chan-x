@@ -50,7 +50,10 @@ QuoteInline =
     if isBacklink
       $.x 'ancestor::*[parent::*[contains(@class,"post")]][1]', quotelink
     else
-      $.x 'ancestor-or-self::*[parent::blockquote][1]', quotelink
+      if Build.getCookie('theme') is 'foolfuuka'
+        $.x 'ancestor-or-self::*[parent::div][1]', quotelink
+      else
+        $.x 'ancestor-or-self::*[parent::blockquote][1]', quotelink
 
   add: (quotelink, boardID, threadID, postID, context, quoter) ->
     isBacklink = $.hasClass quotelink, 'backlink'

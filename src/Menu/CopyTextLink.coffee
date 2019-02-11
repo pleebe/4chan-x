@@ -1,6 +1,7 @@
 CopyTextLink =
   init: ->
     return unless g.VIEW in ['index', 'thread'] and Conf['Menu'] and Conf['Copy Text Link']
+    return if Build.getCookie('theme') is 'foolfuuka'
 
     a = $.el 'a',
       className: 'copy-text-link'

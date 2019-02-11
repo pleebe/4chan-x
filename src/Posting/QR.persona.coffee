@@ -7,6 +7,7 @@ QR.persona =
 
   init: ->
     return unless Conf['Quick Reply'] or (Conf['Menu'] and Conf['Delete Link'])
+    return if Build.getCookie('theme') is 'foolfuuka'
     for item in Conf['QR.personas'].split '\n'
       QR.persona.parseItem item.trim()
     return

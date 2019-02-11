@@ -1,6 +1,7 @@
 ReportLink =
   init: ->
     return unless g.VIEW in ['index', 'thread'] and Conf['Menu'] and Conf['Report Link']
+    return if Build.getCookie('theme') is 'foolfuuka'
 
     a = $.el 'a',
       className: 'report-link'

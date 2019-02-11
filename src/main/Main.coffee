@@ -281,6 +281,13 @@ Main =
           background-color: rgba(#{rgb[...3].join(', ')}, #{0.5*(rgb[3] || 1)});
         }
       """
+      if Build.getCookie('theme') is 'foolfuuka'
+        Main.bgColorStyle.textContent += """
+
+        .dialog {
+          background: #d6f0da;
+        }
+      """
       $.after $.id('fourchanx-css'), Main.bgColorStyle
 
     $.onExists d.head, Site.selectors.styleSheet, (el) ->

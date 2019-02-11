@@ -2,6 +2,7 @@ QR.oekaki =
   menu:
     init: ->
       return unless g.VIEW in ['index', 'thread'] and Conf['Menu'] and Conf['Edit Link'] and Conf['Quick Reply']
+      return if Build.getCookie('theme') is 'foolfuuka'
 
       a = $.el 'a',
         className: 'edit-link'

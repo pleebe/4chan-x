@@ -28,9 +28,14 @@ ThreadUpdater =
     $.on @timer,  'click', @update
     $.on @status, 'click', @update
 
-    updateLink = $.el 'span',
-      className: 'brackets-wrap updatelink'
-    $.extend updateLink, <%= html('<a href="javascript:;">Update</a>') %>
+    if Build.getCookie('theme') is 'foolfuuka'
+      updateLink = $.el 'div',
+        className: 'js_hook_realtimethread'
+      $.extend updateLink, <%= html('This thread is being displayed in real time. <a class="btnr" href="javascript:;">Update now</a>') %>
+    else
+      updateLink = $.el 'span',
+        className: 'brackets-wrap updatelink'
+      $.extend updateLink, <%= html('<a href="javascript:;">Update</a>') %>
     Main.ready ->
       ($.add navLinksBot, [$.tn(' '), updateLink] if (navLinksBot = $ '.navLinksBot'))
     $.on updateLink.firstElementChild, 'click', @update

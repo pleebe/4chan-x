@@ -130,10 +130,15 @@ Index =
     @cb.hover()
 
     # Page list
-    @pagelist = $.el 'div', className: 'pagelist json-index'
-    $.extend @pagelist, <%= readHTML('PageList.html') %>
-    $('.cataloglink a', @pagelist).href = CatalogLinks.catalog()
-    $.on @pagelist, 'click', @cb.pageNav
+    if Build.getCookie('theme') is 'foolfuuka'
+      @pagelist = $.el 'div', className: 'paginate pagelist json-index'
+      $.extend @pagelist, <%= readHTML('FFPageList.html') %>
+      $.on @pagelist, 'click', @cb.pageNav
+    else
+      @pagelist = $.el 'div', className: 'pagelist json-index'
+      $.extend @pagelist, <%= readHTML('PageList.html') %>
+      $('.cataloglink a', @pagelist).href = CatalogLinks.catalog()
+      $.on @pagelist, 'click', @cb.pageNav
 
     @update true, @currentPage
 
@@ -165,6 +170,8 @@ Index =
 
       $.rm el for el in $$ '.navLinks'
       $.rm $.id('ctrl-top')
+      if $.id('delform') is null
+        return
       topNavPos = $.id('delform').previousElementSibling
       $.before topNavPos, $.el 'hr'
       $.before topNavPos, Index.navLinks
@@ -198,6 +205,7 @@ Index =
   menu:
     init: ->
       return if g.VIEW isnt 'index' or !Conf['JSON Index'] or !Conf['Menu'] or !Conf['Thread Hiding Link'] or g.BOARD.ID is 'f'
+      return if Build.getCookie('theme') is 'foolfuuka'
 
       Menu.menu.addEntry
         el: $.el 'a',
@@ -220,7 +228,8 @@ Index =
 
   node: ->
     return if @isReply or @isClone or not (Index.threadPosition[@ID]?)
-    @thread.setPage(Index.threadPosition[@ID] // Index.threadsNumPerPage + 1)
+    if Build.getCookie('theme') is not 'foolfuuka'
+      @thread.setPage(Index.threadPosition[@ID] // Index.threadsNumPerPage + 1)
 
   catalogNode: ->
     $.on @nodes.root, 'mousedown click', (e) =>
@@ -531,16 +540,31 @@ Index =
       a = $.el 'a',
         textContent: i
         href: if i is 1 then './' else i
-      nodes.push $.tn('['), a, $.tn '] '
+      if Build.getCookie('theme') is 'foolfuuka'
+        li = $.el 'li'
+        $.add li, a
+        nodes.push li
+      else
+        nodes.push $.tn('['), a, $.tn '] '
     if pageNum >= maxPageNum-5 and pageNum <= realMaxPageNum
       for i in [maxPageNum+1..pageNum+5] by 1
         if realMaxPageNum >= i
           a = $.el 'a',
             textContent: i
             href: if i is 1 then './' else i
-          nodes.push $.tn('['), a, $.tn '] '
+          if Build.getCookie('theme') is 'foolfuuka'
+            li = $.el 'li'
+            $.add li, a
+            nodes.push li
+          else
+            nodes.push $.tn('['), a, $.tn '] '
     if realMaxPageNum isnt maxPageNum and realMaxPageNum isnt pageNum
-      nodes.push $.tn('[...] ')
+      li = $.el 'li',
+        className: 'disabled'
+      span = $.el 'span',
+        textContent: '...'
+      $.add li, span
+      nodes.push li
     $.rmAll pagesRoot
     $.add pagesRoot, nodes
 
@@ -550,14 +574,24 @@ Index =
     pagesRoot  = $ '.pages', Index.pagelist
 
     # Previous/Next buttons
-    prev = pagesRoot.previousSibling.firstChild
-    next = pagesRoot.nextSibling.firstChild
+    if Build.getCookie('theme') is 'foolfuuka'
+      prev = pagesRoot.previousSibling.firstChild.firstChild
+      next = pagesRoot.nextSibling.firstChild.firstChild
+    else
+      prev = pagesRoot.previousSibling.firstChild
+      next = pagesRoot.nextSibling.firstChild
     href = Math.max pageNum - 1, 1
     prev.href = if href is 1 then './' else href
-    prev.firstChild.disabled = href is pageNum
+    if Build.getCookie('theme') is 'foolfuuka'
+      prev.parentNode.disabled = href is pageNum
+    else
+      prev.firstChild.disabled = href is pageNum
     href = Math.min pageNum + 1, maxPageNum
     next.href = if href is 1 then './' else href
-    next.firstChild.disabled = href is pageNum
+    if Build.getCookie('theme') is 'foolfuuka'
+      next.parentNode.disabled = href is pageNum
+    else
+      next.firstChild.disabled = href is pageNum
 
     # <strong> current page
     if strong = $ 'strong', pagesRoot
@@ -566,9 +600,14 @@ Index =
     else
       strong = $.el 'strong'
 
-    a = pagesRoot.children[pageNum - 1]
-    $.before a, strong
-    $.add strong, a
+    if Build.getCookie('theme') is 'foolfuuka'
+      a = pagesRoot.children[pageNum]
+      li = a.previousSibling
+      $.addClass li, 'active'
+    else
+      a = pagesRoot.children[pageNum - 1]
+      $.before a, strong
+      $.add strong, a
 
   updateHideLabel: ->
     return unless Index.hideLabel
@@ -738,7 +777,8 @@ Index =
 
         if ((OP = thread.OP) and not OP.isFetchedQuote)
           OP.setCatalogOP isCatalog
-          thread.setPage(Index.threadPosition[ID] // Index.threadsNumPerPage + 1)
+          if Build.getCookie('theme') is not 'foolfuuka'
+            thread.setPage(Index.threadPosition[ID] // Index.threadsNumPerPage + 1)
         else
           obj = Index.parsedThreads[ID]
           OP = new Post Build.post(obj), thread, g.BOARD
@@ -906,7 +946,9 @@ Index =
     threads = Index.buildThreads threadIDs, false, Conf['Show Replies']
     nodes = []
     for thread in threads
-      nodes.push thread.nodes.root, $.el('hr')
+      hrel = $.el 'hr',
+        className: 'clearfix'
+      nodes.push thread.nodes.root, hrel
     $.add Index.root, nodes
     if Index.root.parentNode
       $.event 'PostsInserted', null, Index.root

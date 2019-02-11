@@ -101,6 +101,18 @@ Build =
     o = Build.parseJSON data, boardID
     Build.post o
 
+  getCookie: (name) ->
+    nameEQ = name + "="
+    ca = document.cookie.split(";")
+    i = 0
+
+    while i < ca.length
+      c = ca[i]
+      c = c.substring(1, c.length)  while c.charAt(0) is " "
+      return c.substring(nameEQ.length, c.length)  if c.indexOf(nameEQ) is 0
+      i++
+    null
+
   post: (o) ->
     {ID, threadID, boardID, file} = o
     {subject, email, name, tripcode, capcode, pass, uniqueID, flagCode, flagCodeTroll, flag, dateUTC, dateText, commentHTML} = o.info
@@ -127,7 +139,10 @@ Build =
     else
       "/#{boardID}/thread/#{threadID}#q#{ID}"
 
-    postInfo = <%= readHTML('PostInfo.html') %>
+    if Build.getCookie('theme') is 'foolfuuka'
+      postInfo = <%= readHTML('FFPostInfo.html') %>
+    else
+      postInfo = <%= readHTML('PostInfo.html') %>
 
     ### File Info ###
 
@@ -137,13 +152,19 @@ Build =
       shortFilename = Build.shortFilename file.name
       fileThumb = if file.isSpoiler then Build.spoilerThumb(boardID) else file.thumbURL.replace(protocol, '')
 
-    fileBlock = <%= readHTML('File.html') %>
+    if Build.getCookie('theme') is 'foolfuuka'
+      fileBlock = <%= readHTML('FFFile.html') %>
+    else
+      fileBlock = <%= readHTML('File.html') %>
 
     ### Whole Post ###
 
     postClass = if o.isReply then 'reply' else 'op'
 
-    wholePost = <%= readHTML('Post.html') %>
+    if Build.getCookie('theme') is 'foolfuuka'
+      wholePost = <%= readHTML('FFPost.html') %>
+    else
+      wholePost = <%= readHTML('Post.html') %>
 
     container = $.el 'div',
       className: "postContainer #{postClass}Container"
@@ -163,16 +184,15 @@ Build =
     container
 
   summaryText: (status, posts, files) ->
-    text = ''
+    text = ' '
     text += "#{status} " if status
     text += "#{posts} post#{if posts > 1 then 's' else ''}"
     text += " and #{files} image repl#{if files > 1 then 'ies' else 'y'}" if +files
     text += " #{if status is '-' then 'shown' else 'omitted'}."
 
-  summary: (boardID, threadID, posts, files) ->
+  summaryLink: (boardID, threadID) ->
     $.el 'a',
       className: 'summary'
-      textContent: Build.summaryText '', posts, files
       href: "/#{boardID}/thread/#{threadID}"
 
   thread: (thread, data, withReplies) ->
@@ -190,8 +210,20 @@ Build =
         [data.omitted_posts, data.images - data.last_replies.filter((data) -> !!data.ext).length]
       else
         [data.replies, data.images]
-      summary = Build.summary thread.board.ID, data.no, posts, files
-      $.add root, summary
+      bottom = $.el 'div',
+        className: 'thread_tools_bottom'
+      omit = $.el 'span',
+        className: 'omitted'
+      summarylink = Build.summaryLink thread.board.ID, data.no
+      $.extend summarylink, <%= html('<i class="icon icon-resize-full"></i>') %>
+      text = Build.summaryText '', posts, files
+      stext = $.el 'span',
+        className: 'omitted_text'
+        textContent: text
+      $.add omit, summarylink
+      $.add omit, stext
+      $.add bottom, omit
+      $.add root, bottom
     root
 
   catalogThread: (thread, data, pageCount) ->
@@ -220,7 +252,10 @@ Build =
     postCount = data.replies + 1
     fileCount = data.images  + !!data.ext
 
-    container = $.el 'div', <%= readHTML('CatalogThread.html') %>
+    if Build.getCookie('theme') is 'foolfuuka'
+      container = $.el 'div', <%= readHTML('FFCatalogThread.html') %>
+    else
+      container = $.el 'div', <%= readHTML('CatalogThread.html') %>
     $.before thread.OP.nodes.info, [container.childNodes...]
 
     for br in $$('br', thread.OP.nodes.comment) when br.previousSibling and br.previousSibling.nodeName is 'BR'
@@ -247,5 +282,9 @@ Build =
     excerpt = "#{excerpt[...70]}..." if excerpt.length > 73
 
     link = Build.postURL thread.board.ID, thread.ID, data.no
-    $.el 'div', {className: 'catalog-reply'},
-      <%= readHTML('CatalogReply.html') %>
+    if Build.getCookie('theme') is 'foolfuuka'
+      $.el 'div', {className: 'catalog-reply'},
+        <%= readHTML('FFCatalogReply.html') %>
+    else
+      $.el 'div', {className: 'catalog-reply'},
+        <%= readHTML('CatalogReply.html') %>

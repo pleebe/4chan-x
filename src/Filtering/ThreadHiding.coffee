@@ -64,6 +64,7 @@ ThreadHiding =
   menu:
     init: ->
       return if g.VIEW isnt 'index' or !Conf['Menu'] or !Conf['Thread Hiding Link']
+      return if Build.getCookie('theme') is 'foolfuuka'
 
       div = $.el 'div',
         className: 'hide-thread-link'

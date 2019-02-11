@@ -82,7 +82,7 @@ QR =
       $.before origToggle, link
       origToggle.firstElementChild.textContent = 'Original Form'
 
-    if g.VIEW is 'thread'
+    if g.VIEW is 'thread' and Build.getCookie('theme') is not 'foolfuuka'
       linkBot = $.el 'div',
         className: "brackets-wrap qr-link-container-bottom"
       $.extend linkBot, <%= html('<a href="javascript:;" class="qr-link-bottom">Reply to Thread</a>') %>

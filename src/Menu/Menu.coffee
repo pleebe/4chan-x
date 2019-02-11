@@ -1,6 +1,7 @@
 Menu =
   init: ->
     return unless g.VIEW in ['index', 'thread'] and Conf['Menu']
+    return if Build.getCookie('theme') is 'foolfuuka'
 
     @button = $.el 'a',
       className: 'menu-button'

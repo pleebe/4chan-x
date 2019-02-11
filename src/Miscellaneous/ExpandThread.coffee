@@ -11,8 +11,8 @@ ExpandThread =
 
   setButton: (thread) ->
     return if not (thread.nodes.root and (a = $ '.summary', thread.nodes.root))
-    a.textContent = Build.summaryText '+', a.textContent.match(/\d+/g)...
-    a.style.cursor = 'pointer'
+    #a.textContent = Build.summaryText '+', a.textContent.match(/\d+/g)...
+    #a.style.cursor = 'pointer'
     $.on a, 'click', ExpandThread.cbToggle
   
   disconnect: (refresh) ->
@@ -43,6 +43,7 @@ ExpandThread =
     window.scrollBy 0, (thread.nodes.root.getBoundingClientRect().bottom - bottom)
 
   toggle: (thread) ->
+    return if Build.getCookie('theme') is 'foolfuuka'
     return if not (thread.nodes.root and (a = $ '.summary', thread.nodes.root))
     if thread.ID of ExpandThread.statuses
       ExpandThread.contract thread, a, thread.nodes.root
@@ -51,7 +52,7 @@ ExpandThread =
 
   expand: (thread, a) ->
     ExpandThread.statuses[thread] = status = {}
-    a.textContent = Build.summaryText '...', a.textContent.match(/\d+/g)...
+    #a.textContent = Build.summaryText '...', a.textContent.match(/\d+/g)...
     status.req = $.cache "#{location.protocol}//archive.4plebs.org/#{thread.board}/thread/#{thread}.json", ->
       delete status.req
       ExpandThread.parse @, thread, a
@@ -61,7 +62,7 @@ ExpandThread =
     delete ExpandThread.statuses[thread]
     if status.req
       status.req.abort()
-      a.textContent = Build.summaryText '+', a.textContent.match(/\d+/g)... if a
+      #a.textContent = Build.summaryText '+', a.textContent.match(/\d+/g)... if a
       return
 
     replies = $$ '.thread > .replyContainer', threadRoot
@@ -84,7 +85,7 @@ ExpandThread =
       $.rm reply
     if Index.enabled # otherwise handled by Main.addPosts
       $.event 'PostsRemoved', null, a.parentNode
-    a.textContent = Build.summaryText '+', postsCount, filesCount
+    #a.textContent = Build.summaryText '+', postsCount, filesCount
     $.rm $('.summary-bottom', threadRoot)
 
   parse: (req, thread, a) ->
@@ -114,7 +115,7 @@ ExpandThread =
     $.event 'PostsInserted', null, a.parentNode
 
     postsCount    = postsRoot.length
-    a.textContent = Build.summaryText '-', postsCount, filesCount
+    #a.textContent = Build.summaryText '-', postsCount, filesCount
 
     if root
       a2 = a.cloneNode true
