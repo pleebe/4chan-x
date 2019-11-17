@@ -9,7 +9,7 @@ class Post
     @ID       = +root.id.match(/\d*$/)[0]
     @threadID = @thread.ID
     @boardID  = @board.ID
-    @fullID   = "#{@board}.#{@ID}"
+    @fullID   = "#{@board}.#{@ID}.#{@subnum}"
     @context  = @
     @isReply  = (@ID isnt @threadID)
 
@@ -166,8 +166,12 @@ class Post
 
   parseFile: ->
     file = {}
-    for key, selector of Site.selectors.file
-      file[key] = $ selector, @nodes.root
+    if Build.getCookie('theme') is 'foolfuuka'
+      for key, selector of Site.selectors.foolfuuka_file
+        file[key] = $ selector, @nodes.root
+    else
+      for key, selector of Site.selectors.file
+        file[key] = $ selector, @nodes.root
     file.thumbLink = file.thumb?.parentNode
 
     return if not (file.text and file.link)

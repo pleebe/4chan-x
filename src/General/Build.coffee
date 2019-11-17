@@ -25,16 +25,23 @@ Build =
   sameThread: (boardID, threadID) ->
     g.VIEW is 'thread' and g.BOARD.ID is boardID and g.THREADID is +threadID
 
-  postURL: (boardID, threadID, postID) ->
-    if Build.sameThread boardID, threadID
-      "#p#{postID}"
+  postURL: (boardID, threadID, postID, subnum) ->
+    if subnum is not 0
+      if Build.sameThread boardID, threadID
+        "#p#{postID}_#{subnum}"
+      else
+        "/#{boardID}/thread/#{threadID}#p#{postID}_#{subnum}"
     else
-      "/#{boardID}/thread/#{threadID}#p#{postID}"
+      if Build.sameThread boardID, threadID
+        "#p#{postID}"
+      else
+        "/#{boardID}/thread/#{threadID}#p#{postID}"
 
   parseJSON: (data, boardID) ->
     o =
       # id
       ID:       data.no
+      subnum:   data.subnum
       threadID: data.resto or data.no
       boardID:  boardID
       isReply:  !!data.resto
@@ -65,12 +72,12 @@ Build =
     if data.ext
       o.file =
         name:      (Build.unescape data.filename) + data.ext
-        url:       data.media_link
+        url:       data.media_link or "/#{boardID}/#{data.tim}#{data.ext}"
         height:    data.h
         width:     data.w
         MD5:       data.md5
         size:      $.bytesToString data.fsize
-        thumbURL:  data.thumb_link
+        thumbURL:  data.thumb_link or "/#{boardID}/#{data.tim}s#{data.ext}"
         theight:   data.tn_h
         twidth:    data.tn_w
         isSpoiler: !!data.spoiler
@@ -98,6 +105,7 @@ Build =
     Build.parseComment(html).trim().replace(/\s+$/gm, '')
 
   postFromObject: (data, boardID) ->
+    console.log(data.subnum);
     o = Build.parseJSON data, boardID
     Build.post o
 
@@ -114,7 +122,7 @@ Build =
     null
 
   post: (o) ->
-    {ID, threadID, boardID, file} = o
+    {ID, subnum, threadID, boardID, file} = o
     {subject, email, name, tripcode, capcode, pass, uniqueID, flagCode, flagCodeTroll, flag, dateUTC, dateText, commentHTML} = o.info
     {staticPath, gifIcon} = Build
 
@@ -133,11 +141,17 @@ Build =
         capcodePlural = "#{capcodeLong}s"
         capcodeDescription = "a #{capcodeLong}"
 
-    postLink = Build.postURL boardID, threadID, ID
-    quoteLink = if Build.sameThread boardID, threadID
-      "javascript:quote('#{+ID}');"
+    postLink = Build.postURL boardID, threadID, ID, subnum
+    if subnum is not 0
+      quoteLink = if Build.sameThread boardID, threadID
+        "javascript:quote('#{+ID}_#{subnum}');"
+      else
+        "/#{boardID}/thread/#{threadID}#q#{ID}_#{subnum}"
     else
-      "/#{boardID}/thread/#{threadID}#q#{ID}"
+      quoteLink = if Build.sameThread boardID, threadID
+        "javascript:quote('#{+ID}');"
+      else
+        "/#{boardID}/thread/#{threadID}#q#{ID}"
 
     if Build.getCookie('theme') is 'foolfuuka'
       postInfo = <%= readHTML('FFPostInfo.html') %>
@@ -166,9 +180,14 @@ Build =
     else
       wholePost = <%= readHTML('Post.html') %>
 
-    container = $.el 'div',
-      className: "postContainer #{postClass}Container"
-      id:        "pc#{ID}"
+    if subnum is not 0
+      container = $.el 'div',
+        className: "postContainer #{postClass}Container"
+        id:        "pc#{ID}_#{subnum}"
+    else
+      container = $.el 'div',
+        className: "postContainer #{postClass}Container"
+        id:        "pc#{ID}"
     $.extend container, wholePost
 
     # Fix quotelinks
@@ -196,6 +215,9 @@ Build =
       href: "/#{boardID}/thread/#{threadID}"
 
   thread: (thread, data, withReplies) ->
+    console.log(thread);
+    console.log(data);
+    console.log(withReplies);
     if (root = thread.nodes.root)
       $.rmAll root
     else
@@ -210,6 +232,7 @@ Build =
         [data.omitted_posts, data.images - data.last_replies.filter((data) -> !!data.ext).length]
       else
         [data.replies, data.images]
+      article = $.el 'article'
       bottom = $.el 'div',
         className: 'thread_tools_bottom'
       omit = $.el 'span',
@@ -223,7 +246,8 @@ Build =
       $.add omit, summarylink
       $.add omit, stext
       $.add bottom, omit
-      $.add root, bottom
+      $.add article, bottom
+      $.add root, article
     root
 
   catalogThread: (thread, data, pageCount) ->
@@ -281,7 +305,7 @@ Build =
     excerpt or= '\xA0'
     excerpt = "#{excerpt[...70]}..." if excerpt.length > 73
 
-    link = Build.postURL thread.board.ID, thread.ID, data.no
+    link = Build.postURL thread.board.ID, thread.ID, data.no, data.subnum
     if Build.getCookie('theme') is 'foolfuuka'
       $.el 'div', {className: 'catalog-reply'},
         <%= readHTML('FFCatalogReply.html') %>

@@ -1,14 +1,15 @@
 Settings =
   init: ->
     # 4plebs X settings link
-    link = $.el 'a',
-      className:   'settings-link fa fa-wrench'
-      textContent: 'Settings'
-      title: '<%= meta.name %> Settings'
-      href:        'javascript:;'
-    $.on link, 'click', Settings.open
+    if Build.getCookie('theme') is not 'foolfuuka'
+      link = $.el 'a',
+        className:   'settings-link fa fa-wrench'
+        textContent: 'Settings'
+        title: '<%= meta.name %> Settings'
+        href:        'javascript:;'
+      $.on link, 'click', Settings.open
 
-    Header.addShortcut 'settings', link, 820
+      Header.addShortcut 'settings', link, 820
 
     add = @addSection
 

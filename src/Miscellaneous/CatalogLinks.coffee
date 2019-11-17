@@ -3,7 +3,7 @@ CatalogLinks =
     if Site.software is 'yotsuba' and (Conf['External Catalog'] or Conf['JSON Index']) and !(Conf['JSON Index'] and g.VIEW is 'index')
       selector = switch g.VIEW
         when 'thread', 'archive' then '.navLinks.desktop > a'
-        when 'catalog'           then '.navLinks > :first-child > a'
+        when 'gallery'           then '.navLinks > :first-child > a'
         when 'index'             then '#ctrl-top > a, .cataloglink > a'
       $.ready ->
         for link in $$ selector
@@ -11,11 +11,11 @@ CatalogLinks =
             when "/#{g.BOARD}/"
               link.textContent = 'Index' if Conf['JSON Index']
               link.href = CatalogLinks.index()
-            when "/#{g.BOARD}/catalog"
+            when "/#{g.BOARD}/gallery"
               link.href = CatalogLinks.catalog()
-          if g.VIEW is 'catalog' and Conf['JSON Index'] and Conf['Use <%= meta.name %> Catalog']
+          if g.VIEW is 'gallery' and Conf['JSON Index'] and Conf['Use <%= meta.name %> Catalog']
             catalogLink = link.parentNode.cloneNode true
-            catalogLink.firstElementChild.textContent = '<%= meta.name %> Catalog'
+            catalogLink.firstElementChild.textContent = '<%= meta.name %> Gallery'
             catalogLink.firstElementChild.href = CatalogLinks.catalog()
             $.after link.parentNode, [$.tn(' '), catalogLink]
         return
@@ -37,8 +37,8 @@ CatalogLinks =
 
   node: ->
     for a in $$ 'a', @nodes.comment
-      if m = a.href.match /^https?:\/\/(test\.4plebs\.org\/[^\/]+)\/catalog(#s=.*)?/
-        a.href = "//#{m[1]}/#{m[2] or '#catalog'}"
+      if m = a.href.match /^https?:\/\/(test\.4plebs\.org\/[^\/]+)\/gallery(#s=.*)?/
+        a.href = "//#{m[1]}/#{m[2] or '#gallery'}"
     return
 
   toggle: ->
@@ -78,9 +78,9 @@ CatalogLinks =
     if Conf['External Catalog'] and board in ['a', 'c', 'g', 'biz', 'k', 'm', 'o', 'p', 'v', 'vg', 'vr', 'w', 'wg', 'cm', '3', 'adv', 'an', 'asp', 'cgl', 'ck', 'co', 'diy', 'fa', 'fit', 'gd', 'int', 'jp', 'lit', 'mlp', 'mu', 'n', 'out', 'po', 'sci', 'sp', 'tg', 'toy', 'trv', 'tv', 'vp', 'wsg', 'x', 'f', 'pol', 's4s', 'lgbt']
       "//catalog.neet.tv/#{board}/"
     else if Conf['JSON Index'] and Conf['Use <%= meta.name %> Catalog']
-      if location.hostname in ['test.4plebs.org', 'archive.4plebs.org'] and g.BOARD.ID is board and g.VIEW is 'index' then '#catalog' else "//#{BoardConfig.domain(board)}/#{board}/#catalog"
+      if location.hostname in ['test.4plebs.org', 'archive.4plebs.org'] and g.BOARD.ID is board and g.VIEW is 'index' then '#gallery' else "//#{BoardConfig.domain(board)}/#{board}/#gallery"
     else
-      "//#{BoardConfig.domain(board)}/#{board}/catalog"
+      "//#{BoardConfig.domain(board)}/#{board}/gallery"
 
   index: (board=g.BOARD.ID) ->
     if Conf['JSON Index'] and board isnt 'f'

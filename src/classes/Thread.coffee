@@ -80,6 +80,7 @@ class Thread
   collect: ->
     n = 0
     @posts.forEach (post) ->
+      console.log(post);
       if post.clones.length
         n++
       else

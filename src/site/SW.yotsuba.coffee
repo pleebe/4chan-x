@@ -36,6 +36,11 @@ SW.yotsuba =
       text:  '.file > :first-child'
       link:  '.fileText > a'
       thumb: 'a.fileThumb > [data-md5]'
+    foolfuuka_file:
+      text:  '.post_file_metadata'
+      link:  'a.fileText'
+      thumb: 'a.fileThumb > [data-md5]'
+      controls: '.post_file_controls'
     comment:   '.postMessage'
     spoiler:   's'
     quotelink: ':not(pre) > .quotelink' # XXX https://github.com/4chan/4chan-JS/issues/77: 4chan currently creates quote links inside [code] tags; ignore them
@@ -55,7 +60,7 @@ SW.yotsuba =
         (\d+)   # threadID
         (?:[/?][^#]*)?
         (?:#p
-        (\d+)   # postID
+        (\d+(?:_|,\d+)?)   # postID
         )?
         $
       ///
@@ -109,7 +114,10 @@ SW.yotsuba =
 
   parseFile: (post, file) ->
     {text, link, thumb} = file
-    return false if not (info = link.nextSibling?.textContent.match /\(([\d.]+ [KMG]?B).*\)/)
+    if Build.getCookie('theme') is 'foolfuuka'
+      return false if not (info = text.textContent.match /([\d.]+ [KMG]?B).*/)
+    else
+      return false if not (info = link.nextSibling?.textContent.match /\(([\d.]+ [KMG]?B).*\)/)
     $.extend file,
       name:       text.title or link.title or link.textContent
       size:       info[1]

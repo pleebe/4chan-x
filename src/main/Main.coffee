@@ -84,6 +84,49 @@ Main =
       ($.getSync or $.get) {'jsWhitelist': Conf['jsWhitelist']}, ({jsWhitelist}) ->
         $.addCSP "script-src #{jsWhitelist.replace(/^#.*$/mg, '').replace(/[\s;]+/g, ' ').trim()}"
 
+    if Build.getCookie('theme') is 'foolfuuka'
+      # bootstrap dropdowns
+      dropdowns = $$ '.dropdown-toggle'
+      dropdowns.forEach (d) ->
+        $.on d, 'click', (e) ->
+          e.preventDefault()
+          if this.parentNode.className is 'dropdown open'
+            this.parentNode.className = 'dropdown'
+          else
+            this.parentNode.className = 'dropdown open'
+
+      dropups = $$ '.dropup-toggle'
+      dropups.forEach (d) ->
+        $.on d, 'click', (e) ->
+          e.preventDefault()
+          if this.parentNode.className is 'btn-group dropup pull-right open'
+            this.parentNode.className = 'btn-group dropup pull-right'
+          else if this.parentNode.className is 'btn-group dropup pull-right'
+            this.parentNode.className = 'btn-group dropup pull-right open'
+
+      # advanced search
+      input = $$ '.search-query'
+      input = input[0]
+      box = $$ '.search_box'
+      box = box[0]
+      box_visible = false
+      inside_input = $.id 'search_form_comment'
+      $.on input, 'focus', (e) ->
+        e.preventDefault()
+        if box_visible is false
+          rect = input.getBoundingClientRect()
+          box.style = 'top: '+(rect.top-10)+'px; left: '+(rect.right-input.offsetWidth-15)+'px; display: block;'
+          inside_input.value = input.value
+          inside_input.focus()
+          $.on document, 'click', (e) ->
+            if box_visible and !box.contains(e.target) and !input.contains(e.target)
+              input.value = inside_input.value
+              box.style = ''
+              box_visible = false
+          box_visible = true
+
+    $.clear()
+
     # Get saved values as items
     items = {}
     items[key] = undefined for key of Conf
@@ -102,7 +145,7 @@ Main =
         else if !items.previousversion?
           Main.ready ->
             $.set 'previousversion', g.VERSION
-            Settings.open()
+            #Settings.open()
 
         # Migrate old settings
         else if items.previousversion isnt g.VERSION
@@ -177,10 +220,12 @@ Main =
     if pathname[2] in ['thread', 'res']
       g.VIEW     = 'thread'
       g.THREADID = +pathname[3].replace(/\.\w+$/, '')
-    else if /^(?:catalog|archive)(?:\.\w+)?$/.test(pathname[2])
+    else if /^(?:gallery|archive)(?:\.\w+)?$/.test(pathname[2])
       g.VIEW = pathname[2].replace(/\.\w+$/, '')
     else if /^(?:index|\d*)(?:\.\w+)?$/.test(pathname[2])
       g.VIEW = 'index'
+    else if /^(search)(?:\.\w+)?$/.test(pathname[2])
+      g.VIEW = 'search'
     else
       return
 
@@ -235,7 +280,7 @@ Main =
   setClass: ->
     knownStyles = ['yotsuba', 'yotsuba-b', 'futaba', 'burichan', 'photon', 'tomorrow', 'spooky']
 
-    if Site.software is 'yotsuba' and g.VIEW is 'catalog'
+    if Site.software is 'yotsuba' and g.VIEW is 'gallery'
       if (mainStyleSheet = $.id('base-css'))
         style = mainStyleSheet.href.match(/catalog_(\w+)/)?[1].replace('_new', '').replace(/_+/g, '-')
         if style in knownStyles
@@ -282,12 +327,14 @@ Main =
         }
       """
       if Build.getCookie('theme') is 'foolfuuka'
-        Main.bgColorStyle.textContent += """
+        if Build.getCookie('skin') is 'default'
+          Main.bgColorStyle.textContent += """
 
-        .dialog {
-          background: #d6f0da;
-        }
-      """
+          .dialog {
+            background: #d6f0da;
+          }
+        """
+
       $.after $.id('fourchanx-css'), Main.bgColorStyle
 
     $.onExists d.head, Site.selectors.styleSheet, (el) ->
@@ -610,6 +657,7 @@ Main =
     ['Banner',                    Banner]
     ['Flash Features',            Flash]
     ['Reply Pruning',             ReplyPruning]
+    ['Search',                    Search]
     <% if (readJSON('/.tests_enabled')) { %>
     ['Build Test',                Build.Test]
     <% } %>

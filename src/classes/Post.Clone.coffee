@@ -44,8 +44,12 @@ Post.Clone = class extends Post
       @file = {}
       for key, val of @origin.file
         @file[key] = val
-      for key, selector of Site.selectors.file
-        @file[key] = $ selector, @nodes.root
+      if Build.getCookie('theme') is 'foolfuuka'
+        for key, selector of Site.selectors.foolfuuka_file
+          @file[key] = $ selector, @nodes.root
+      else
+        for key, selector of Site.selectors.file
+          @file[key] = $ selector, @nodes.root
       @file.thumbLink = @file.thumb?.parentNode
       @file.fullImage = $ '.full-image', @file.thumbLink if @file.thumbLink
       @file.videoControls = $ '.video-controls', @file.text

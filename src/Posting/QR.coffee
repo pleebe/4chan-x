@@ -47,7 +47,8 @@ QR =
       else
         QR.close()
 
-    Header.addShortcut 'qr', sc, 540
+    if Build.getCookie('theme') is not 'foolfuuka'
+      Header.addShortcut 'qr', sc, 540
 
   initReady: ->
     QR.postingIsEnabled = true
@@ -691,6 +692,7 @@ QR =
     post.lock()
 
     formData =
+      board:    g.BOARD
       resto:    threadID
       name:     post.name unless QR.forcedAnon
       email:    post.email
@@ -704,8 +706,8 @@ QR =
       pwd:      QR.persona.getPassword()
 
     options =
-      responseType: 'document'
-      withCredentials: true
+      responseType: 'json'
+      #withCredentials: true
       onload: QR.response
       onerror: ->
         # On connection error, the post most likely didn't go through.
@@ -740,7 +742,7 @@ QR =
           extra.form.append 'recaptcha_response_field', response.response
         else
           extra.form.append 'g-recaptcha-response', response.response
-      QR.req = $.ajax "https://sys.#{location.hostname.split('.')[1]}.org/#{g.BOARD}/post", options, extra
+      QR.req = $.ajax "http://archive.#{location.hostname.split('.')[1]}.org/submit.json", options, extra
       QR.req.progress = '...'
 
     if typeof captcha is 'function'
@@ -771,9 +773,10 @@ QR =
     post.unlock()
 
     resDoc  = req.response
-    if (err = resDoc.getElementById 'errmsg') # error!
+    console.log(resDoc);
+    if (err = resDoc.error) # error!
       $('a', err)?.target = '_blank' # duplicate image link
-    else if (connErr = resDoc.title isnt 'Post successful!')
+    else if (connErr = resDoc.success isnt 'Post successful!')
       err = QR.connectionError()
       Captcha.cache.save QR.currentCaptcha if QR.currentCaptcha
     else if req.status isnt 200
@@ -809,11 +812,11 @@ QR =
       QR.error err
       return
 
-    h1 = $ 'h1', resDoc
+    #h1 = $ 'h1', resDoc
 
-    [_, threadID, postID] = h1.nextSibling.textContent.match /thread:(\d+),no:(\d+)/
-    postID   = +postID
-    threadID = +threadID or postID
+    #[_, threadID, postID] = h1.nextSibling.textContent.match /thread:(\d+),no:(\d+)/
+    postID   = resDoc.num + ',' + resDoc.num
+    threadID = resDoc.thread_num
     isReply  = threadID isnt postID
 
     # Post/upload confirmed as successful.
@@ -845,7 +848,7 @@ QR =
 
     QR.cleanNotifications()
     if Conf['Posting Success Notifications']
-      QR.notifications.push new Notice 'success', h1.textContent, 5
+      QR.notifications.push new Notice 'success', resDoc.success, 5
 
     QR.cooldown.add threadID, postID
 

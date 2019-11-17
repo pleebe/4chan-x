@@ -1311,14 +1311,16 @@ span.hide-announcement {
 .fnswitch:hover > .fntrunc,
 .fnswitch:not(:hover) > .fnfull,
 .expanded-image > .post > .file > .fileThumb > video[data-md5],
-.expanded-image > .post > .file > .fileThumb > img[data-md5] {
+.expanded-image > .post > .file > .fileThumb > img[data-md5],
+.expanded-image > .post > .post_wrapper > .thread_image_box > .fileThumb > img[data-md5] {
   display: none;
 }
 .full-image[data-full-i-d] {
   display: none;
   cursor: pointer;
 }
-.expanded-image > .post > .file > .fileThumb > .full-image {
+.expanded-image > .post > .file > .fileThumb > .full-image,
+.expanded-image > .post > .post_wrapper > .thread_image_box > .fileThumb > .full-image {
   display: inline;
 }
 .expanded-image {

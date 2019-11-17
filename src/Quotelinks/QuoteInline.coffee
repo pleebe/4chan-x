@@ -85,6 +85,7 @@ QuoteInline =
     Unread.readSinglePost post
 
   rm: (quotelink, boardID, threadID, postID, context) ->
+    console.log(postID);
     isBacklink = $.hasClass quotelink, 'backlink'
     # Select the corresponding inlined quote, and remove it.
     root = QuoteInline.findRoot quotelink, isBacklink

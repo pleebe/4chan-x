@@ -81,7 +81,7 @@ ThreadUpdater =
     ThreadUpdater.postIDs = []
     ThreadUpdater.fileIDs = []
     @posts.forEach (post) ->
-      ThreadUpdater.postIDs.push post.ID
+      ThreadUpdater.postIDs.push post.ID + "." + post.subnum
       (ThreadUpdater.fileIDs.push post.ID if post.file)
 
     ThreadUpdater.cb.interval.call $.el 'input', value: Conf['Interval']
@@ -284,7 +284,8 @@ ThreadUpdater =
 
     # Build the index, create posts.
     for postObject in postObjects
-      ID = postObject.no
+      ID = postObject.no + "." + postObject.subnum
+      console.log(ID);
       index.push ID
       files.push ID if postObject.fsize
 

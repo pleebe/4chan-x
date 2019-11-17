@@ -9,7 +9,8 @@ ImageExpand =
       href: 'javascript:;'
 
     $.on @EAI, 'click', @cb.toggleAll
-    Header.addShortcut 'expand-all', @EAI, 520
+    if Build.getCookie('theme') is not 'foolfuuka'
+      Header.addShortcut 'expand-all', @EAI, 520
     $.on d, 'scroll visibilitychange', @cb.playVideos
     @videoControls = $.el 'span', className: 'video-controls'
     $.extend @videoControls, <%= html(' <a href="javascript:;" title="You can also contract the video by dragging it to the left.">contract</a>') %>
@@ -206,7 +207,6 @@ ImageExpand =
   completeExpand: (post) ->
     {file} = post
     return unless file.isExpanding # contracted before the image loaded
-
     bottom = Header.getTopOf(file.thumb) + file.thumb.getBoundingClientRect().height
     oldHeight = d.body.clientHeight
     {scrollY} = window

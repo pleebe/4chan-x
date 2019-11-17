@@ -52,7 +52,7 @@ ThreadWatcher =
         , <%= html('<span></span><span class="shortcut-text">Alt+click</span>') %>
         order: 6
         open: ({thread}) ->
-          return false if Conf['Index Mode'] isnt 'catalog'
+          return false if Conf['Index Mode'] isnt 'gallery'
           @el.firstElementChild.textContent = if ThreadWatcher.isWatched thread
             'Unwatch'
           else
@@ -398,7 +398,7 @@ ThreadWatcher =
       (thread.catalogView.nodes.root.classList.toggle 'watched', isWatched if thread.catalogView)
 
     if Conf['Pin Watched Threads']
-      $.event 'SortIndex', {deferred: Conf['Index Mode'] isnt 'catalog'}
+      $.event 'SortIndex', {deferred: Conf['Index Mode'] isnt 'gallery'}
 
   refreshIcon: ->
     for className in ['replies-unread', 'replies-quoting-you']

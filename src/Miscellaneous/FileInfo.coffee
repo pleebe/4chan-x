@@ -8,6 +8,7 @@ FileInfo =
 
   node: ->
     return unless @file
+    return if Build.getCookie('theme') is 'foolfuuka'
     if @isClone
       for a in $$ '.file-info .download-button', @file.text
         $.on a, 'click', ImageCommon.download

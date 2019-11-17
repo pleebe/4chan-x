@@ -746,36 +746,11 @@ Config =
     MD5: ''
 
   sauces: """
-    # Known filename formats:
-    http://www.pixiv.net/member_illust.php?mode=medium&illust_id=%$1;regexp:/^(\\d+)_p\\d+/
-    //%$1.deviantart.com/gallery/#/d%$2;regexp:/^\\w+_by_(\\w+)-d([\\da-z]+)/
-    //imgur.com/%$1;regexp:/^(?![a-zA-Z][a-z]{6})(?![A-Z]{7})(?!\\d{7})([\\da-zA-Z]{7})(?: \\(\\d+\\))?\\.\\w+$/
-    http://flickr.com/photo.gne?id=%$1;regexp:/^(\\d+)_[\\da-f]{10}(?:_\\w)*\\b/
-    https://www.facebook.com/photo.php?fbid=%$1;regexp:/^\\d+_(\\d+)_\\d+_[no]\\b/
-
-    # Reverse image search:
-    https://www.google.com/searchbyimage?image_url=%IMG&safe=off
-    https://www.yandex.com/images/search?rpt=imageview&img_url=%IMG
-    #//tineye.com/search?url=%IMG
-    #//www.bing.com/images/search?q=imgurl:%IMG&view=detailv2&iss=sbi#enterInsights
-
-    # Specialized reverse image search:
+    https://archive.4plebs.org/_/search/image/%sMD5/;text:View Same
+    https://www.google.com/searchbyimage?image_url=%IMG&safe=off;text:Google
     //iqdb.org/?url=%IMG
-    https://trace.moe/?auto&url=%IMG;text:wait
-    #//3d.iqdb.org/?url=%IMG
-    #//saucenao.com/search.php?url=%IMG
-
-    # "View Same" in archives:
-    http://eye.swfchan.com/search/?q=%name;types:swf
-    #https://desuarchive.org/_/search/image/%sMD5/
-    #https://archive.4plebs.org/_/search/image/%sMD5/
-    #https://boards.fireden.net/_/search/image/%sMD5/
-    #https://foolz.fireden.net/_/search/image/%sMD5/
-
-    # Other tools:
-    #http://exif.regex.info/exif.cgi?imgurl=%URL
-    #//imgops.com/%URL;types:gif,jpg,png
-    #//www.gif-explode.com/%URL;types:gif
+    //saucenao.com/search.php?url=%IMG;text:SauceNAO
+    https://trace.moe/?auto&url=%IMG;text:Trace
   """
 
   FappeT:

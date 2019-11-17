@@ -2,9 +2,10 @@ Header =
   init: ->
     @menu = new UI.Menu 'header'
 
-    menuButton = $.el 'span',
-      className: 'menu-button'
-    $.extend menuButton, <%= html('<i></i>') %>
+    if Build.getCookie('theme') is not 'foolfuuka'
+      menuButton = $.el 'span',
+        className: 'menu-button'
+      $.extend menuButton, <%= html('<i></i>') %>
 
     box = UI.checkbox
 
@@ -29,7 +30,8 @@ Header =
     @shortcutToggler     = shortcutToggler.firstElementChild
     @customNavToggler    = customNavToggler.firstElementChild
 
-    $.on menuButton,           'click',  @menuToggle
+    if Build.getCookie('theme') is not 'foolfuuka'
+      $.on menuButton,           'click',  @menuToggle
     $.on @headerToggler,       'change', @toggleBarVisibility
     $.on @barFixedToggler,     'change', @toggleBarFixed
     $.on @barPositionToggler,  'change', @toggleBarPosition
@@ -55,7 +57,8 @@ Header =
     $.sync 'Centered links',             @setLinkJustify
     $.sync 'Bottom Board List',          @setFooterVisibility
 
-    @addShortcut 'menu', menuButton, 900
+    if Build.getCookie('theme') is not 'foolfuuka'
+      @addShortcut 'menu', menuButton, 900
 
     @menu.addEntry
       el: $.el 'span',
@@ -108,9 +111,9 @@ Header =
       Header.bottomBoardList = $ '.boardList', footer
       CatalogLinks.setLinks Header.bottomBoardList
 
-    if g.VIEW is 'catalog' or !Conf['Disable Native Extension']
+    if g.VIEW is 'gallery' or !Conf['Disable Native Extension']
       cs = $.el 'a', href: 'javascript:;'
-      if g.VIEW is 'catalog'
+      if g.VIEW is 'gallery'
         cs.title = cs.textContent = 'Catalog Settings'
         cs.className = 'fa fa-book'
       else
@@ -252,7 +255,7 @@ Header =
         href: "//#{BoardConfig.domain(boardID)}/#{boardID}/"
         textContent: boardID
         title: BoardConfig.title(boardID)
-      a.href += g.VIEW if g.VIEW in ['catalog', 'archive']
+      a.href += g.VIEW if g.VIEW in ['gallery', 'archive']
       a.className = 'current' if a.hostname is location.hostname and boardID is g.BOARD.ID
       a
 
@@ -264,10 +267,10 @@ Header =
       text or boardID
 
     if m = t.match /-(index|catalog)/
-      unless boardID is 'f' and m[1] is 'catalog'
+      unless boardID is 'f' and m[1] is 'gallery'
         a.dataset.only = m[1]
         a.href = CatalogLinks[m[1]] boardID
-        $.addClass a, 'catalog' if m[1] is 'catalog'
+        $.addClass a, 'gallery' if m[1] is 'gallery'
       else
         return a.firstChild # Its text node.
 

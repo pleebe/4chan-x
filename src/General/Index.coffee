@@ -45,7 +45,10 @@ Index =
       href: 'javascript:;'
       textContent: 'Refresh Index'
     $.on @button, 'click', -> Index.update(false, Index.currentPage)
-    Header.addShortcut 'index-refresh', @button, 590
+    if Build.getCookie('theme') is not 'foolfuuka'
+      Header.addShortcut 'index-refresh', @button, 590
+
+    console.log(Conf['Index Mode']);
 
     # Header "Index Navigation" submenu
     entries = []
@@ -214,7 +217,7 @@ Index =
         , <%= html('<span></span><span class="shortcut-text">Shift+click</span>') %>
         order: 20
         open: ({thread}) ->
-          return false if Conf['Index Mode'] isnt 'catalog'
+          return false if Conf['Index Mode'] isnt 'gallery'
           @el.firstElementChild.textContent = if thread.isHidden
             'Unhide'
           else
@@ -308,7 +311,7 @@ Index =
       Index.pageLoad false
 
     size: (e) ->
-      if Conf['Index Mode'] isnt 'catalog'
+      if Conf['Index Mode'] isnt 'gallery'
         $.rmClass Index.root, 'catalog-small'
         $.rmClass Index.root, 'catalog-large'
       else if Conf['Index Size'] is 'small'
@@ -358,7 +361,7 @@ Index =
           a = e.target
         else
           return
-      return if a.textContent is 'Catalog'
+      return if a.textContent is 'Gallery'
       e.preventDefault()
       Index.userPageNav +a.pathname.split(/\/+/)[2] or 1
 
@@ -397,18 +400,10 @@ Index =
   hashCommands:
     mode:
       'paged':         'paged'
-      'infinite-scrolling': 'infinite'
-      'infinite':      'infinite'
-      'all-threads':   'all pages'
-      'all-pages':     'all pages'
-      'catalog':       'catalog'
+      'gallery':       'gallery'
     sort:
       'bump-order':        'bump'
-      'last-reply':        'lastreply'
-      'last-long-reply':   'lastlong'
       'creation-date':     'birth'
-      'reply-count':       'replycount'
-      'file-count':        'filecount'
 
   processHash: ->
     # XXX https://bugzilla.mozilla.org/show_bug.cgi?id=483304
@@ -462,14 +457,14 @@ Index =
       Index.changed.mode = true
       Conf['Index Mode'] = mode
       $.set 'Index Mode', mode
-      unless mode is 'catalog' or Conf['Previous Index Mode'] is mode
+      unless mode is 'gallery' or Conf['Previous Index Mode'] is mode
         Conf['Previous Index Mode'] = mode
         $.set 'Previous Index Mode', mode
     if sort? and sort isnt Index.currentSort
       Index.changed.sort = true
       Index.currentSort = sort
       Index.saveSort()
-    page = 1 if Conf['Index Mode'] in ['all pages', 'catalog']
+    page = 1 if Conf['Index Mode'] in ['all pages', 'gallery']
     if page? and page isnt Index.currentPage
       Index.changed.page = true
       Index.currentPage = page
@@ -506,7 +501,7 @@ Index =
     Index.changed = {}
 
   setupMode: ->
-    for mode in ['paged', 'infinite', 'all pages', 'catalog']
+    for mode in ['paged', 'infinite', 'all pages', 'gallery']
       $[if mode is Conf['Index Mode'] then 'addClass' else 'rmClass'] doc, "#{mode.replace /\ /g, '-'}-mode"
     Index.selectMode.value = Conf['Index Mode']
     Index.cb.size()
@@ -583,13 +578,19 @@ Index =
     href = Math.max pageNum - 1, 1
     prev.href = if href is 1 then './' else href
     if Build.getCookie('theme') is 'foolfuuka'
-      prev.parentNode.disabled = href is pageNum
+      if href is pageNum
+        prev.parentNode.className = 'disabled'
+      else
+        prev.parentNode.className = ''
     else
       prev.firstChild.disabled = href is pageNum
     href = Math.min pageNum + 1, maxPageNum
     next.href = if href is 1 then './' else href
     if Build.getCookie('theme') is 'foolfuuka'
-      next.parentNode.disabled = href is pageNum
+      if href is pageNum
+        next.parentNode.className = 'disabled'
+      else
+        next.parentNode.className = ''
     else
       next.firstChild.disabled = href is pageNum
 
@@ -601,9 +602,8 @@ Index =
       strong = $.el 'strong'
 
     if Build.getCookie('theme') is 'foolfuuka'
-      a = pagesRoot.children[pageNum]
-      li = a.previousSibling
-      $.addClass li, 'active'
+      li = pagesRoot.children[pageNum - 1]
+      li.className = 'active'
     else
       a = pagesRoot.children[pageNum - 1]
       $.before a, strong
@@ -647,11 +647,18 @@ Index =
 
     if page!=0
       page--
-    Index.req = $.ajax "#{location.protocol}//archive.4plebs.org/#{g.BOARD}/single-catalog-#{page}.json",
-      onabort:   Index.load
-      onloadend: Index.load
-    ,
-      whenModified: 'Index'
+    if Conf['Index Mode'] is 'gallery'
+      Index.req = $.ajax "#{location.protocol}//archive.4plebs.org/#{g.BOARD}/catalog.json",
+        onabort:   Index.load
+        onloadend: Index.load
+      ,
+        whenModified: 'Index'
+    else
+      Index.req = $.ajax "#{location.protocol}//archive.4plebs.org/#{g.BOARD}/single-catalog-#{page}.json",
+        onabort:   Index.load
+        onloadend: Index.load
+      ,
+        whenModified: 'Index'
     $.addClass Index.button, 'fa-spin'
 
   load: (e) ->
@@ -729,7 +736,9 @@ Index =
       obj.isHidden = results.hide or ThreadHiding.isHidden(obj.boardID, obj.threadID)
       if data.last_replies
         for reply in data.last_replies
-          Index.replyData["#{g.BOARD}.#{reply.no}"] = reply
+          console.log(reply.subnum);
+          Index.replyData["#{g.BOARD}.#{reply.no}.#{reply.subnum}"] = reply
+    console.log(Index.liveThreadDict);
     if Index.liveThreadData[0]
       Build.spoilerRange[g.BOARD.ID] = Index.liveThreadData[0].custom_spoiler
     g.BOARD.threads.forEach (thread) ->
@@ -756,6 +765,8 @@ Index =
     newThreads = []
     newPosts   = []
     for ID in threadIDs
+      #console.log(Index.liveThreadDict[ID]);
+      console.log(ID);
       try
         threadData = Index.liveThreadDict[ID]
 
@@ -772,6 +783,7 @@ Index =
         else
           thread = new Thread ID, g.BOARD
           newThreads.push thread
+        console.log(thread);
         thread.json = threadData
         threads.push thread
 
@@ -811,7 +823,11 @@ Index =
       continue if not (lastReplies = Index.liveThreadDict[thread.ID].last_replies)
       nodes = []
       for data in lastReplies
-        if (post = thread.posts[data.no]) and not post.isFetchedQuote
+        console.log(data.subnum);
+        numSubnumID = data.no
+        if data.subnum != 0
+          numSubnumID += '_' + data.subnum
+        if (post = thread.posts[numSubnumID]) and not post.isFetchedQuote
           nodes.push post.nodes.root
           continue
         nodes.push node = Build.postFromObject data, thread.board.ID
@@ -919,7 +935,7 @@ Index =
     switch Conf['Index Mode']
       when 'all pages'
         threadIDs = Index.sortedThreadIDs
-      when 'catalog'
+      when 'gallery'
         threadIDs = Index.sortedThreadIDs.filter (ID) -> !Index.isHidden(ID) isnt Index.showHiddenThreads
       else
         threadIDs = Index.threadsOnPage Index.currentPage
@@ -928,7 +944,7 @@ Index =
     $.rmAll Header.hover
     if Index.loaded and Index.root.parentNode
       $.event 'PostsRemoved', null, Index.root
-    if Conf['Index Mode'] is 'catalog'
+    if Conf['Index Mode'] is 'gallery'
       Index.buildCatalog threadIDs
     else
       Index.buildStructure threadIDs

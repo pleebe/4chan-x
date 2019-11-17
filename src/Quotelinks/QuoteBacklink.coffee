@@ -42,7 +42,10 @@ QuoteBacklink =
           containers.push clone.nodes.backlinkContainer
       for container in containers
         link = a.cloneNode true
-        nodes = if container.firstChild then [$.tn(' '), link] else [link]
+        if Build.getCookie('theme') is 'foolfuuka'
+          nodes = if container.firstChild then [$.tn(' '), link] else [$.tn('Quoted By: '), link]
+        else
+          nodes = if container.firstChild then [$.tn(' '), link] else [link]
         if Conf['Quote Previewing']
           $.on link, 'mouseover', QuotePreview.mouseover
         if Conf['Quote Inlining']
@@ -54,7 +57,7 @@ QuoteBacklink =
     return
   secondNode: ->
     if @isClone and (@origin.isReply or Conf['OP Backlinks'])
-      @nodes.backlinkContainer = $ '.container', @nodes.post
+      @nodes.backlinkContainer = $ '.backlink_list', @nodes.post
       return
     # Don't backlink the OP.
     return unless @isReply or Conf['OP Backlinks']
@@ -66,4 +69,4 @@ QuoteBacklink =
       $.add @nodes.info, container
   getContainer: (id) ->
     @containers[id] or=
-      $.el 'span', className: 'container'
+      $.el 'div', className: 'backlink_list'

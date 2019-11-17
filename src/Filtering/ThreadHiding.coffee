@@ -1,8 +1,8 @@
 ThreadHiding =
   init: ->
-    return if g.VIEW not in ['index', 'catalog'] or !Conf['Thread Hiding Buttons'] and !(Conf['Menu'] and Conf['Thread Hiding Link']) and !Conf['JSON Index']
+    return if g.VIEW not in ['index', 'gallery'] or !Conf['Thread Hiding Buttons'] and !(Conf['Menu'] and Conf['Thread Hiding Link']) and !Conf['JSON Index']
     @db = new DataBoard 'hiddenThreads'
-    return @catalogWatch() if g.VIEW is 'catalog'
+    return @catalogWatch() if g.VIEW is 'gallery'
     @catalogSet g.BOARD
     $.on d, 'IndexRefreshInternal', @onIndexRefresh
     if Conf['Thread Hiding Buttons']
@@ -81,7 +81,7 @@ ThreadHiding =
         el: div
         order: 20
         open: ({thread, isReply}) ->
-          if isReply or thread.isHidden or Conf['JSON Index'] and Conf['Index Mode'] is 'catalog'
+          if isReply or thread.isHidden or Conf['JSON Index'] and Conf['Index Mode'] is 'gallery'
             return false
           ThreadHiding.menu.thread = thread
           true
@@ -97,7 +97,7 @@ ThreadHiding =
         el: div
         order: 20
         open: ({thread, isReply}) ->
-          if isReply or !thread.isHidden or Conf['JSON Index'] and Conf['Index Mode'] is 'catalog'
+          if isReply or !thread.isHidden or Conf['JSON Index'] and Conf['Index Mode'] is 'gallery'
             return false
           ThreadHiding.menu.thread = thread
           true
@@ -111,7 +111,7 @@ ThreadHiding =
         el: hideStubLink
         order: 15
         open: ({thread, isReply}) ->
-          if isReply or !thread.isHidden or Conf['JSON Index'] and Conf['Index Mode'] is 'catalog'
+          if isReply or !thread.isHidden or Conf['JSON Index'] and Conf['Index Mode'] is 'gallery'
             return false
           ThreadHiding.menu.thread = thread
 

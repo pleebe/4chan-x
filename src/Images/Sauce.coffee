@@ -9,9 +9,14 @@ Sauce =
     return unless links.length
 
     @links = links
-    @link  = $.el 'a',
-      target:    '_blank'
-      className: 'sauce'
+    if Build.getCookie('theme') is 'foolfuuka'
+      @link  = $.el 'a',
+        target:    '_blank'
+        className: 'sauce btnr parent'
+    else
+      @link  = $.el 'a',
+        target:    '_blank'
+        className: 'sauce'
     Callbacks.Post.push
       name: 'Sauce'
       cb:   @node
@@ -91,7 +96,10 @@ Sauce =
       if (node = Sauce.createSauceLink link, @)
         nodes.push $.tn(' '), node
         skipped.push [link, node] if node.dataset.skip
-    $.add @file.text, nodes
+    if Build.getCookie('theme') is 'foolfuuka'
+      $.prepend @file.controls, nodes
+    else
+      $.add @file.text, nodes
 
     if skipped.length
       observer = new MutationObserver =>

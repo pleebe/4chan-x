@@ -23,7 +23,7 @@ Keybinds =
       return unless /(Esc|Alt|Ctrl|Meta|Shift\+\w{2,})/.test(key) and not /^Alt\+(\d|Up|Down|Left|Right)$/.test(key)
     unless (
       g.VIEW not in ['index', 'thread'] or
-      g.VIEW is 'index' and Conf['JSON Index'] and Conf['Index Mode'] is 'catalog' or
+      g.VIEW is 'index' and Conf['JSON Index'] and Conf['Index Mode'] is 'gallery' or
       g.VIEW is 'index' and g.BOARD.ID is 'f'
     )
       threadRoot = Nav.getThread()
