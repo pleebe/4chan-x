@@ -1,0 +1,40 @@
+?{file}{<div id="f${ID}" class="file ?{!o.isReply}{thread_image_box}{post_file}">
+    ?{o.isReply}{
+  <span class="post_file_controls">
+    <a href="${fileURL}" download="${file.name}" class="btnr parent"><i class="icon-download-alt"></i></a>
+  </span>&nbsp;
+  <a href="${fileURL}" class="post_file_filename fileText" id="fT${ID}" rel="tooltip" title="${file.name}" target="_blank">${shortFilename}</a>,
+  <span class="post_file_metadata"> ${file.size}, ${file.dimensions || "PDF"}?{file.tag}{, Tag: ${file.tag}} </span>
+    </div>}
+?{o.isReply}{<div class="thread_image_box">}
+    <a class="thread_image_link fileThumb?{file.isSpoiler}{ imgspoiler}{}" href="${fileURL}" target="_blank"?{file.hasDownscale}{ data-m}>
+      <img class="post_image"
+        src="${fileThumb}" 
+        alt="${file.size}" 
+        data-md5="${file.MD5}"
+        ?{boardID === "f"}{
+        style="height: 250px; width: 250px;"
+        }{
+        style="height: ${file.isSpoiler ? 100 : file.theight}px; width: ${file.isSpoiler ? 100 : file.twidth}px;"
+        }
+      >
+    </a>?{o.isReply}{</div>}
+    ?{!o.isReply}{
+    <div class="post_file post_file_metadata" style="padding-left: 2px;max-width:177px;"> ${file.size}, ${file.dimensions || "PDF"}?{file.tag}{, Tag: ${file.tag}},&nbsp;
+      <a class="post_file_filename fileText" id="fT${ID}" href="${fileURL}" target="_blank">${file.name}</a>
+    </div>
+    <div class="post_file_controls">
+      <a href="${fileURL}" download="${file.name}" class="btnr parent">
+      <i class="icon-download-alt"></i></a>
+    </div>
+    }
+  ?{!o.isReply}{</div>}
+}{
+  ?{o.fileDeleted}{
+    <div class="file" id="f${ID}">
+      <span class="fileThumb">
+        <img src="${staticPath}filedeleted-res${gifIcon}" alt="File deleted." class="fileDeletedRes retina">
+      </span>
+    </div>
+  }
+}

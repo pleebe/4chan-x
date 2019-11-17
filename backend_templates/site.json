@@ -1,0 +1,37 @@
+{
+  "site_title": "4plebs",
+  "title": "4plebs",
+  "javascript_site": "test.4plebs.org",
+  "api_site": "archive.4plebs.org",
+  "javascript_file": "test.js",
+  "boards": {
+    "adv": "Advice",
+    "f": "Flash",
+    "hr": "High Resolution",
+    "o": "Auto",
+    "pol": "Politically Incorrect",
+    "s4s": "Sh*t 4chan Says",
+    "sp": "Sports",
+    "tg": "Traditional Games",
+    "trv": "Travel",
+    "tv": "Television & Film",
+    "x": "Paranormal"
+  },
+  "internal_boards": {
+    "plebs": "4plebs discussion"
+  },
+  "articles": {
+    "/_/articles/credits/": "Credits &amp; Links",
+    "/_/articles/faq/": "FAQ",
+    "/_/articles/legal/": "Legal",
+    "/_/articles/transparency/": "Transparency",
+    "/_/articles/twitter/": "Twitter"
+  },
+  "themes": {
+    "foolfuuka-default": "FoolFuuka - Default",
+    "foolfuuka-midnight": "FoolFuuka - Midnight",
+    "foolfuuka-christmas": "FoolFuuka - Christmas",
+    "foolfuuka-valentine": "FoolFuuka - Valentine\"s Day",
+    "foolfuuka-halloween": "FoolFuuka - Halloween"
+  }
+}

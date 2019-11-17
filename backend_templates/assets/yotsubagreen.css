@@ -1,0 +1,18 @@
+body {
+    background: #eef8f0 url(/fade-green.png) top center repeat-x !important;
+}
+div.reply {
+    background-color: #d6f0da !important;
+    border: 1px solid #cccccc !important;
+}
+.dialog, .suboption-list > div:last-of-type, :root.catalog-hover-expand .catalog-container:hover > .post {
+    background: #d6f0da !important;
+}
+.unread-mark-read {
+    background-color: #d6f0da !important;
+}
+div.pagelist {
+    background: #d6f0da !important;
+    border-right: 1px solid #cccccc !important;
+    border-bottom: 1px solid #cccccc !important;
+}

@@ -1,0 +1,6 @@
+<article class="post ?{subnum !== 0}{post_ghost }${postClass}?{o.capcodeHighlight}{ highlightPost} ?{!o.isReply}{thread}"?{o.isReply}{ style="margin: 0 5px 3px 16px;"} id="p${ID}">
+    ?{!o.isReply}{<div class="pull-right" id="threadStats"></div>}{<div class="post_wrapper">}
+    &{fileBlock}&{postInfo}
+    <div class="text postMessage" id="m${ID}">&{commentHTML}</div>
+    ?{o.isReply}{</div>}
+</article>
